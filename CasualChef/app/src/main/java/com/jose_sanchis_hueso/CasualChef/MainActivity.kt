@@ -6,6 +6,7 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
@@ -27,8 +28,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.GsonBuilder
 import com.jose_sanchis_hueso.CasualChef.databinding.ActivityMainBinding
 import com.jose_sanchis_hueso.CasualChef.model.Articulo
+import java.io.OutputStream
 import kotlin.math.cos
 
 class MainActivity : AppCompatActivity(), OnItemClick {
@@ -99,6 +102,10 @@ class MainActivity : AppCompatActivity(), OnItemClick {
         }
 
 
+
+
+
+
         //Lo del firebase
 /*
         FirebaseAuth.getInstance().signInAnonymously()
@@ -106,10 +113,14 @@ class MainActivity : AppCompatActivity(), OnItemClick {
                 val user = authResult.user
                 val firestore = FirebaseFirestore.getInstance()
                 val cosas: MutableMap<String, Any> = HashMap()
-                cosas["Id"] = "1"
-                cosas["Nombre"] = "ben dover"
-                cosas["Apellido"] = "kneegrows"
-                firestore.collection("culo")
+                cosas["id"] = 1
+                cosas["nombre"] = "ben dover"
+                cosas["desarrollador"] = "kneegrows"
+                cosas["tags"] = "tag"
+                cosas["imagen"] = "imagen"
+                cosas["descripcion"] = "descripcosa"
+                cosas["tipo"] = "consola"
+                firestore.collection("recetas")
                     .add(cosas)
                     .addOnSuccessListener { documentReference ->
                         Toast.makeText(applicationContext, "Se ha guardado la receta", Toast.LENGTH_SHORT).show()
@@ -124,7 +135,8 @@ class MainActivity : AppCompatActivity(), OnItemClick {
                 Toast.makeText(applicationContext, "Ha habido un error de autenticación", Toast.LENGTH_SHORT).show()
             }
 */
-
+// crea el json con los datos nuevos
+        saveFirestoreDataToJson(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -151,6 +163,25 @@ class MainActivity : AppCompatActivity(), OnItemClick {
     override fun onIntemClick(articulo: Articulo) {
                 abrirDetalle(articulo.id)
 
+    }
+
+    fun saveFirestoreDataToJson(context: Context) {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection("recetas").get().addOnSuccessListener { querySnapshot ->
+            val articleList = mutableListOf<Map<String, Any>>()
+
+            for (document in querySnapshot) {
+                articleList.add(document.data)
+            }
+
+            val gson = GsonBuilder().setPrettyPrinting().create()
+            val json = gson.toJson(articleList)
+
+            val outputStream: OutputStream = context.openFileOutput("recetas.json", Context.MODE_PRIVATE)
+            outputStream.write(json.toByteArray())
+            outputStream.close()
+        }
     }
 
 
