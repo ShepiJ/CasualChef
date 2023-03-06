@@ -34,9 +34,9 @@ class DetalleActivity : AppCompatActivity() {
         imageView.setImageResource(articulo.imagen.ponerImagen(imageView.context))
         tvNombre.text = articulo.nombre
         tvDeveloper.text = articulo.desarrollador
-        tvTag1.text = articulo.tags[0]
-        tvTag2.text = articulo.tags[1]
-        tvTag3.text = articulo.tags[2]
+        tvTag1.text = articulo.tags[0].toString()
+        tvTag2.text = articulo.tags[1].toString()
+        tvTag3.text = articulo.tags[2].toString()
         tvDescripcion.text = articulo.descripcion
     }
 

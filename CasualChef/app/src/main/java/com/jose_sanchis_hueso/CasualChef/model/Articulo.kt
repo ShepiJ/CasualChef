@@ -4,13 +4,15 @@ import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.jose_sanchis_hueso.CasualChef.R
+import java.io.File
 import java.lang.reflect.Type
+import java.nio.charset.Charset
 
 data class Articulo(
     val id: Int,
     val nombre: String,
     val desarrollador: String,
-    val tags: Array<String>,
+    val tags: String,
     val puntuacion: Float,
     val imagen: String,
     val descripcion: String,
@@ -19,10 +21,11 @@ data class Articulo(
     companion object {
 
         fun getArticulo(context: Context, tipo: String): List<Articulo> {
-            var articuloList: MutableList<Articulo> = mutableListOf()
+            val articuloList: MutableList<Articulo> = mutableListOf()
 
             // Read from the JSON file
-            val jsonString = context.resources.openRawResource(R.raw.datos_articulos).bufferedReader().use { it.readText() }
+            val file = File(context.filesDir, "recetas.json")
+            val jsonString = file.readText(Charset.defaultCharset())
 
             val listType: Type = object : TypeToken<MutableList<Articulo?>?>() {}.type
             val gson = Gson()
@@ -34,10 +37,11 @@ data class Articulo(
         }
 
         fun getArticulo(context: Context): List<Articulo> {
-            var articuloList: MutableList<Articulo> = mutableListOf()
+            val articuloList: MutableList<Articulo> = mutableListOf()
 
             // Read from the JSON file
-            val jsonString = context.resources.openRawResource(R.raw.datos_articulos).bufferedReader().use { it.readText() }
+            val file = File(context.filesDir, "recetas.json")
+            val jsonString = file.readText(Charset.defaultCharset())
 
             val listType: Type = object : TypeToken<MutableList<Articulo?>?>() {}.type
             val gson = Gson()
@@ -46,7 +50,7 @@ data class Articulo(
             return articuloList
         }
 
-        fun getVideoJuegoPorId(id: Int?,context: Context): Articulo {
+        fun getVideoJuegoPorId(id: Int?, context: Context): Articulo {
             val articulo = getArticulo(context).filter { articulo ->
                 articulo.id == id
             }

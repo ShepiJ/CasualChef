@@ -36,7 +36,7 @@ import kotlin.math.cos
 
 class MainActivity : AppCompatActivity(), OnItemClick {
 
-    private lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
 
@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity(), OnItemClick {
                 cosas["nombre"] = "ben dover"
                 cosas["desarrollador"] = "kneegrows"
                 cosas["tags"] = "tag"
-                cosas["imagen"] = "imagen"
+                cosas["imagen"] = "monsterHunter.jpg"
                 cosas["descripcion"] = "descripcosa"
                 cosas["tipo"] = "consola"
                 firestore.collection("recetas")
@@ -147,15 +147,11 @@ class MainActivity : AppCompatActivity(), OnItemClick {
     //Cuando selecciono una opción del options menú hace invisible el fragmento del tabbed para que no se solape y viceversa
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        if (binding.navHostFragment.visibility == View.INVISIBLE){
-            binding.navHostFragment.visibility = View.VISIBLE
 
-            binding.navHostFragment2.visibility = View.INVISIBLE
-        } else {
             binding.navHostFragment.visibility = View.INVISIBLE
 
             binding.navHostFragment2.visibility = View.VISIBLE
-        }
+
 
         return NavigationUI.onNavDestinationSelected(item, navController) || super.onOptionsItemSelected(item)
     }
