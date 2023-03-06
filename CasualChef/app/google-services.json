@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "830298429815",
+    "project_id": "casualchef",
+    "storage_bucket": "casualchef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830298429815:android:7e51533b41797d17602972",
+        "android_client_info": {
+          "package_name": "com.jose_sanchis_hueso.CasualChef"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "830298429815-5dnkhuu7jcfs46ee2395pv43av4r7fr4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jose_sanchis_hueso.CasualChef",
+            "certificate_hash": "b9c670c3d2c47d6a4b62690a48efa09980c41fd1"
+          }
+        },
+        {
+          "client_id": "830298429815-8n5nd19abe6n7k7j8ceedtus441bmp29.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpgmAxPLB3W2zVSwM_u8OnxZBeejN5MUA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "830298429815-8n5nd19abe6n7k7j8ceedtus441bmp29.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

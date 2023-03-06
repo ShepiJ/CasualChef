@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="5dp"
+    android:layout_margin="9dp"
+    app:cardCornerRadius="8dp"
+    android:backgroundTint="@color/background_carta"
+    android:layout_height="150dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvDeveloper"
+            android:layout_width="174dp"
+            android:layout_height="31dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="9dp"
+            android:gravity="center"
+            android:text="developer del juego"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/estrellas"
+            app:layout_constraintEnd_toEndOf="@+id/tvTituloVideojuegos"
+            app:layout_constraintHorizontal_bias="0.45"
+            app:layout_constraintStart_toStartOf="@+id/tvTituloVideojuegos"
+            app:layout_constraintTop_toBottomOf="@+id/tvTituloVideojuegos" />
+
+        <RatingBar
+            android:id="@+id/estrellas"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="160dp"
+            android:layout_height="15dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="16dp"
+            android:max="10"
+            android:progressBackgroundTint="#00FFEA"
+            android:progressTint="#ECF400"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tvTituloVideojuegos"
+            app:layout_constraintHorizontal_bias="0.473"
+            app:layout_constraintStart_toStartOf="@+id/tvTituloVideojuegos"
+            app:layout_constraintTop_toBottomOf="@+id/tvDeveloper" />
+
+        <TextView
+            android:id="@+id/tvTituloVideojuegos"
+            android:layout_width="179dp"
+            android:layout_height="47dp"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="6dp"
+            android:text="Nombre del juego"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/tvDeveloper"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivVideojuego"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivVideojuego"
+            android:layout_width="181dp"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@mipmap/ic_launcher"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

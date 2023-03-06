@@ -1,0 +1,59 @@
+[
+  {
+    "id": 1,
+    "nombre": "Monster Hunter Rise",
+    "desarrollador": "Capcom",
+    "tipo": "videojuego",
+    "tags": [
+      "Accion",
+      "RPG",
+      "Online/Co-Op"
+    ],
+    "puntuacion": 7,
+    "imagen": "monsterHunter.jpg",
+    "descripcion": "¡Acepta el reto y apúntate a la caza! En Monster Hunter Rise, la entrega más reciente de la galardonada y superexitosa serie Monster Hunter, te convertirás en cazador, explorarás mapas nuevos y usarás muchas armas diferentes para acabar con monstruos temibles en una historia totalmente nueva."
+  },
+  {
+    "id": 2,
+    "nombre": "Enter the Gungeon",
+    "desarrollador": "Dodge Roll",
+    "tipo": "videojuego",
+    "tags": [
+      "Bullet Hell",
+      "Roguelike",
+      "2D"
+    ],
+    "puntuacion": 9,
+    "imagen": "enterTheGungeon.jpg",
+    "descripcion": "Enter the Gungeon es un dungeon crawler de tiroteos que sigue a una banda de marginados arrepentidos en su intento de conseguir la absolución personal a base de disparar, saquear, dar volteretas y voltear mesas para alcanzar el tesoro supremo de la legendaria Armazmorra"
+  },
+  {
+    "id": 9,
+    "nombre": "Play 5",
+    "desarrollador": "Sony Interactive Entertainment",
+    "tipo": "consola",
+    "tags": [
+      "Rápida",
+      "Grande",
+      "Más exclusivos"
+    ],
+    "puntuacion": 7,
+    "imagen": "ps5.png",
+    "descripcion": "PlayStation 5 (プレイステーション 5 Pureisutēshon Faibu?, abreviada como PS5) es la quinta consola de videojuegos de sobremesa desarrollada por la empresa Sony Interactive Entertainment. Fue anunciada en el año 2019 como la sucesora de la PlayStation 4, la PS5 se lanzó el 12 de noviembre de 2020 en Australia, Japón, Nueva Zelanda, América del Norte, Singapur y Corea del Sur, y en el resto de países el 19 de noviembre de 2020. La PlayStation 5 junto con la Xbox Series X|S de Microsoft, lanzada el mismo mes, son parte de la novena generación de consolas de videojuegos."
+  }
+,
+  {
+    "id": 10,
+    "nombre": "Xbox Series X",
+    "desarrollador": "Microsoft",
+    "tipo": "consola",
+    "tags": [
+      "Rápida",
+      "pequeña",
+      "Potente"
+    ],
+    "puntuacion": 8,
+    "imagen": "xbox.png",
+    "descripcion": "Xbox Series X y Xbox Series S (colectivamente, Xbox Series X|S), es una línea de videoconsolas de sobremesa desarrolladas por Microsoft y la cuarta generación de la familia de consolas Xbox. La familia de consolas, conocida colectivamente como \"Project Scarlett\"1\u200B y revelada por primera vez en el E3 2019, incluye la Xbox Series X de gama alta, revelada en The Game Awards 2019 y cuyo nombre en código es \"Project Anaconda\", y la Xbox Series S de menor costo, anunciada en septiembre de 2020 y cuyo nombre en código es \"Project Lockhart\". Ambas consolas se lanzaron el 10 de noviembre de 2020 y compiten actualmente con la PlayStation 5 de Sony."
+  }
+]
