@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.CasualChef" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.CasualChef" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -15,9 +15,19 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="Theme.MySplashScreen" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">#5FD435</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/follettortuga</item>
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/casualchef</item>
         <item name="postSplashScreenTheme">@style/Theme.CasualChef</item>
     </style>
+
+    <style name="Theme.MySplashScreen.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.MySplashScreen.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.MySplashScreen.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

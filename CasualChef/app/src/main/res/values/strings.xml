@@ -6,4 +6,13 @@
     <string name="placeholderDesarrollador">Desarrollador</string>
     <string name="loremIpsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla tincidunt nibh sed lectus aliquet, id ultricies justo aliquet. Nullam lacinia rutrum enim in semper. Vivamus velit ante, placerat sed ante ut, pretium tristique diam. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer quis egestas nisl, sed fringilla magna. Quisque at lectus id est aliquam tincidunt eu quis est. Sed id mauris vitae libero sodales aliquet ut a purus. Morbi ac sem sit amet ipsum sollicitudin congue. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis vel justo nec turpis placerat accumsan ac id nibh. Donec ultricies libero erat, sit amet gravida nisl accumsan vel.</string>
     <string name="about">Esta aplicación te muestra información\n sobre juegos o consolas segun la ventana en la que estes\n\nHe hecho la app con 2 menus en la misma actividad ya que queria probar como se hacia y si era posible hacerlo\n(no se si está bien hecho)\n\n Mi idea principal era como hacer una especie de copia de la interfaz whatsapp pero al final se me ocurrio hacer una interfaz similar a este pero con temática de videojuegos con el TabLayout y Options Menu, también queria probar a en vez de usar 2 fragmentos (el de la carta y el del detalle) para cada tipo de artículo usar los mismos para los 2</string>
+    <string name="title_activity_login">Login</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>

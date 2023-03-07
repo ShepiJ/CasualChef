@@ -43,10 +43,6 @@ class MainActivity : AppCompatActivity(), OnItemClick {
     override fun onCreate(savedInstanceState: Bundle?) {
 
 
-
-
-        val screenSplash = installSplashScreen()
-
         super.onCreate(savedInstanceState)
         setContentView(
             ActivityMainBinding.inflate(layoutInflater).also { binding = it }.root
@@ -65,41 +61,8 @@ class MainActivity : AppCompatActivity(), OnItemClick {
         )
         NavigationUI.setupWithNavController(binding.toolbar, navController, appBarConfiguration)
 
-        Thread.sleep(1000)
-        screenSplash.setKeepOnScreenCondition{false}
 
-        screenSplash.setOnExitAnimationListener{splashScreenView ->
-            val slideBack = ObjectAnimator.ofFloat(
-                splashScreenView.view,
-                View.TRANSLATION_Y,
-                0f,
-                splashScreenView.view.width.toFloat(),
-                -splashScreenView.view.width.toFloat()
-            ).apply {
-                interpolator = DecelerateInterpolator()
-                duration = 600
-                doOnEnd { splashScreenView.remove() }
-            }
 
-            val icon=splashScreenView.iconView
-            val iconAnimator = ValueAnimator
-                .ofInt(icon.height,0)
-                .setDuration(1000)
-
-            iconAnimator.addUpdateListener {
-                val value = it.animatedValue as Int
-                icon.layoutParams.width = value
-                icon.layoutParams.height = value
-                icon.requestLayout()
-                if (value==0) slideBack.start()
-            }
-
-            AnimatorSet().apply {
-                interpolator = AnticipateInterpolator(5f)
-                play(iconAnimator)
-                start()
-            }
-        }
 
 
 
@@ -136,7 +99,10 @@ class MainActivity : AppCompatActivity(), OnItemClick {
             }
 */
 // crea el json con los datos nuevos
-        saveFirestoreDataToJson(this)
+        FirebaseAuth.getInstance().signInAnonymously()
+            .addOnSuccessListener { authResult ->
+                saveFirestoreDataToJson(this)
+            }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -181,7 +147,7 @@ class MainActivity : AppCompatActivity(), OnItemClick {
     }
 
 
-    private fun abrirDetalle(id:Int) {
+    private fun abrirDetalle(id:String) {
 
         val intent = Intent(this,DetalleActivity::class.java)
         intent.putExtra("ID",id)

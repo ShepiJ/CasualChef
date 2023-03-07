@@ -19,24 +19,20 @@ class DetalleActivity : AppCompatActivity() {
     }
 
     private fun cargarVideoJuego() {
-        var id = intent.getIntExtra("ID",0)
+        var id = intent.getStringExtra("ID")
 
-        var articulo = Articulo.getVideoJuegoPorId(id,this)
+        var articulo = Articulo.getVideoJuegoPorId(id.toString(),this)
 
         val imageView = binding.imageView
         val tvNombre = binding.tvNombre
         val tvDeveloper = binding.tvDeveloper
         val tvTag1 = binding.tvTag1
-        val tvTag2 = binding.tvTag2
-        val tvTag3 = binding.tvTag3
         val tvDescripcion = binding.tvDescripcion
 
         imageView.setImageResource(articulo.imagen.ponerImagen(imageView.context))
         tvNombre.text = articulo.nombre
         tvDeveloper.text = articulo.desarrollador
-        tvTag1.text = articulo.tags[0].toString()
-        tvTag2.text = articulo.tags[1].toString()
-        tvTag3.text = articulo.tags[2].toString()
+        tvTag1.text = articulo.tags
         tvDescripcion.text = articulo.descripcion
     }
 

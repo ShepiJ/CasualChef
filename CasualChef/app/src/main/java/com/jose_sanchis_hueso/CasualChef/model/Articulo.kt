@@ -9,7 +9,7 @@ import java.lang.reflect.Type
 import java.nio.charset.Charset
 
 data class Articulo(
-    val id: Int,
+    val id: String,
     val nombre: String,
     val desarrollador: String,
     val tags: String,
@@ -50,9 +50,9 @@ data class Articulo(
             return articuloList
         }
 
-        fun getVideoJuegoPorId(id: Int?, context: Context): Articulo {
+        fun getVideoJuegoPorId(id: String?, context: Context): Articulo {
             val articulo = getArticulo(context).filter { articulo ->
-                articulo.id == id
+                articulo.id.equals(id)
             }
             return articulo[0]
         }
