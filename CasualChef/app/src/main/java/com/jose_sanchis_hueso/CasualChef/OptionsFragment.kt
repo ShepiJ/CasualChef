@@ -45,8 +45,39 @@ class OptionsFragment : Fragment() {
         binding2 = (activity as MainActivity).binding
 
         binding.btnMandar.setOnClickListener {
-            binding2.navHostFragment.visibility = View.VISIBLE
-            binding2.navHostFragment2.visibility = View.INVISIBLE
+
+            FirebaseAuth.getInstance().signInAnonymously()
+                .addOnSuccessListener { authResult ->
+                    val user = authResult.user
+                    val firestore = FirebaseFirestore.getInstance()
+                    val cosas: MutableMap<String, Any> = HashMap()
+                    cosas["id"] = UUID.randomUUID().toString()
+                    cosas["nombre"] = binding.nombreReceta.text.toString()
+                    cosas["desarrollador"] = "cosa"
+                    cosas["descripcion"] = binding.descripcionReceta.text.toString()
+                    cosas["puntuacion"] = 0
+                    cosas["tags"] = binding.tagsReceta.text.toString()
+                    cosas["imagen"] = "monsterHunter.jpg"
+
+                        // Add the `cosas` map to the `recetas` collection in Firestore
+                        firestore.collection("recetas")
+                            .add(cosas)
+                            .addOnSuccessListener {
+                                Toast.makeText(context, "Se ha publicado la receta", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                            .addOnFailureListener { e ->
+                                Log.e(TAG, "DBFallo", e)
+                                Toast.makeText(context, "Ha habido un error al publicar la receta", Toast.LENGTH_SHORT).show()
+                            }
+                    }
+
+
+
+            Handler().postDelayed({
+                binding2.navHostFragment.visibility = View.VISIBLE
+                binding2.navHostFragment2.visibility = View.INVISIBLE
+            }, 2000)
         }
 
         binding.btnVolver.setOnClickListener {

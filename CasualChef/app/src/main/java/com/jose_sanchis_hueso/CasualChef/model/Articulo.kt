@@ -15,12 +15,11 @@ data class Articulo(
     val tags: String,
     val puntuacion: Float,
     val imagen: String,
-    val descripcion: String,
-    val tipo: String
-)  {
+    val descripcion: String
+) {
     companion object {
 
-        fun getArticulo(context: Context, tipo: String): List<Articulo> {
+        fun getArticulo(context: Context, desarrollador: String = ""): List<Articulo> {
             val articuloList: MutableList<Articulo> = mutableListOf()
 
             // Read from the JSON file
@@ -31,10 +30,12 @@ data class Articulo(
             val gson = Gson()
             articuloList.addAll(gson.fromJson(jsonString, listType))
 
-            val listaFiltrada = articuloList.filter { articulo -> articulo.tipo == tipo }
-
-            return listaFiltrada
+            return when (desarrollador) {
+                "kneegrows" -> articuloList.filter { articulo -> articulo.desarrollador == desarrollador }
+                else -> articuloList.filter { articulo -> articulo.desarrollador != "kneegrows" }
+            }
         }
+
 
         fun getArticulo(context: Context): List<Articulo> {
             val articuloList: MutableList<Articulo> = mutableListOf()

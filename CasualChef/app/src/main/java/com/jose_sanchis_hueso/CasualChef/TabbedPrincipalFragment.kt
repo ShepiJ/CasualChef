@@ -30,7 +30,7 @@ class TabbedPrincipalFragment : Fragment() {
             when (position){
                 0 -> tab.text = "Mis Recetas"
                 1 -> tab.text = "Recetas Globales"
-                else -> tab.text = "Mis Recetas"
+                else -> tab.text = "Recetas Globales"
             }
         }.attach()
     }
@@ -42,9 +42,9 @@ class TabbedPrincipalFragment : Fragment() {
         override fun createFragment(position: Int): Fragment {
             //Dependiendo de que posicion esté el fragmento cargará los articulos dependiendo del tipo que tengas
             return when(position){
-                0 -> ArticulosFragment("videojuego")
-                1 -> ArticulosFragment("consola")
-                else -> ArticulosFragment("videojuego")
+                0 -> ArticulosFragment("kneegrows")
+                1 -> ArticulosFragment("otro")
+                else -> ArticulosFragment("otro")
             }
         }
     }

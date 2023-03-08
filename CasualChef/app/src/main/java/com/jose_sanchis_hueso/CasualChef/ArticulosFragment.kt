@@ -3,6 +3,7 @@ package com.jose_sanchis_hueso.CasualChef
 import OnItemClick
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,10 +15,10 @@ import com.jose_sanchis_hueso.CasualChef.adapters.MyRecyclerViewAdapter
 import com.jose_sanchis_hueso.CasualChef.model.Articulo
 
 
-class ArticulosFragment(tipo: String) : Fragment() {
+class ArticulosFragment(desarrollador: String) : Fragment() {
     private var columnCount = 1
     var listener: OnItemClick? = null
-    var tipo = tipo
+    var desarrollador = desarrollador
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -33,20 +34,20 @@ class ArticulosFragment(tipo: String) : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         val view = inflater.inflate(R.layout.fragment_articulos, container, false)
-
+        Log.d("ArticulosFragmentLog", "desarrollador = $desarrollador")
         if (view is RecyclerView) {
             view.layoutManager = when {
-                columnCount <=1 -> LinearLayoutManager(context)
-                else ->  GridLayoutManager(context,columnCount)
+                columnCount <= 1 -> LinearLayoutManager(context)
+                else -> GridLayoutManager(context, columnCount)
             }
 
-            when(tipo) {
-                //dependiendo del tipo del articulo lo cargaré en un fragmento o otro
-                "videojuego" -> view.adapter = MyRecyclerViewAdapter(Articulo.getArticulo(this.requireContext(),"videojuego"),listener)
-                "consola" -> view.adapter = MyRecyclerViewAdapter(Articulo.getArticulo(this.requireContext(),"consola"),listener)
+            val articuloList = if (desarrollador == "kneegrows") {
+                Articulo.getArticulo(requireContext(), "kneegrows")
+            } else {
+                Articulo.getArticulo(requireContext()).filter { it.desarrollador != "kneegrows" }
             }
+            view.adapter = MyRecyclerViewAdapter(articuloList, listener)
         }
         return view
     }
