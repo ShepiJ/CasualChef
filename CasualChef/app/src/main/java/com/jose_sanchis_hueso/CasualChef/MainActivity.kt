@@ -26,11 +26,15 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.GsonBuilder
 import com.jose_sanchis_hueso.CasualChef.databinding.ActivityMainBinding
 import com.jose_sanchis_hueso.CasualChef.model.Articulo
+import java.io.File
 import java.io.OutputStream
 import kotlin.math.cos
 
@@ -61,43 +65,6 @@ class MainActivity : AppCompatActivity(), OnItemClick {
         )
         NavigationUI.setupWithNavController(binding.toolbar, navController, appBarConfiguration)
 
-
-
-
-
-
-
-
-
-        //Lo del firebase
-/*
-        FirebaseAuth.getInstance().signInAnonymously()
-            .addOnSuccessListener { authResult ->
-                val user = authResult.user
-                val firestore = FirebaseFirestore.getInstance()
-                val cosas: MutableMap<String, Any> = HashMap()
-                cosas["id"] = 1
-                cosas["nombre"] = "ben dover"
-                cosas["desarrollador"] = "kneegrows"
-                cosas["tags"] = "tag"
-                cosas["imagen"] = "monsterHunter.jpg"
-                cosas["descripcion"] = "descripcosa"
-                cosas["tipo"] = "consola"
-                firestore.collection("recetas")
-                    .add(cosas)
-                    .addOnSuccessListener { documentReference ->
-                        Toast.makeText(applicationContext, "Se ha guardado la receta", Toast.LENGTH_SHORT).show()
-                    }
-                    .addOnFailureListener { e ->
-                        Log.e(TAG, "DBFallo", e)
-                        Toast.makeText(applicationContext, "Ha habido un error", Toast.LENGTH_SHORT).show()
-                    }
-            }
-            .addOnFailureListener { e ->
-                Log.e(TAG, "Authentication failed", e)
-                Toast.makeText(applicationContext, "Ha habido un error de autenticación", Toast.LENGTH_SHORT).show()
-            }
-*/
 // crea el json con los datos nuevos
         FirebaseAuth.getInstance().signInAnonymously()
             .addOnSuccessListener { authResult ->
@@ -143,9 +110,41 @@ class MainActivity : AppCompatActivity(), OnItemClick {
             val outputStream: OutputStream = context.openFileOutput("recetas.json", Context.MODE_PRIVATE)
             outputStream.write(json.toByteArray())
             outputStream.close()
+
+            // download and cache all images
+            downloadAndCacheImages(context)
         }
     }
 
+
+    fun downloadAndCacheImages(context: Context) {
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference.child("images")
+
+        // get a list of all files in the "images" folder
+        storageRef.listAll().addOnSuccessListener { listResult ->
+            // loop through each file and download it
+            listResult.items.forEach { item ->
+                val cacheFile = File(context.cacheDir, "${item.name}.jpg") // append ".jpg" to the cache file name
+
+                // if the image is not already cached, download it and cache it
+                if (!cacheFile.exists()) {
+                    // download the image to a temporary file
+                    val tempFile = File.createTempFile("image", null, context.cacheDir)
+                    item.getFile(tempFile).addOnSuccessListener {
+                        // move the temporary file to the cache directory
+                        tempFile.renameTo(cacheFile)
+
+                        // cache the image using Glide
+                        Glide.with(context)
+                            .load(cacheFile)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .preload()
+                    }
+                }
+            }
+        }
+    }
 
     private fun abrirDetalle(id:String) {
 

@@ -19,9 +19,8 @@ class DetalleActivity : AppCompatActivity() {
     }
 
     private fun cargarVideoJuego() {
-        var id = intent.getStringExtra("ID")
-
-        var articulo = Articulo.getVideoJuegoPorId(id.toString(),this)
+        val id = intent.getStringExtra("ID")
+        val articulo = Articulo.getVideoJuegoPorId(id.toString(), this)
 
         val imageView = binding.imageView
         val tvNombre = binding.tvNombre
@@ -29,11 +28,17 @@ class DetalleActivity : AppCompatActivity() {
         val tvTag1 = binding.tvTag1
         val tvDescripcion = binding.tvDescripcion
 
-        imageView.setImageResource(articulo.imagen.ponerImagen(imageView.context))
+        val bitmap = articulo.imagen.ponerImagen(this)
+        if (bitmap != null) {
+            imageView.setImageBitmap(bitmap)
+        } else {
+            imageView.setImageResource(R.drawable.casualchef)
+        }
+
         tvNombre.text = articulo.nombre
         tvDeveloper.text = articulo.desarrollador
         tvTag1.text = articulo.tags
         tvDescripcion.text = articulo.descripcion
     }
-
 }
+

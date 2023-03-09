@@ -35,7 +35,6 @@ class ArticulosFragment(desarrollador: String) : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_articulos, container, false)
-        Log.d("ArticulosFragmentLog", "desarrollador = $desarrollador")
         if (view is RecyclerView) {
             view.layoutManager = when {
                 columnCount <= 1 -> LinearLayoutManager(context)
