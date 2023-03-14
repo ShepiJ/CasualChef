@@ -36,48 +36,18 @@ class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val sharedPref = getSharedPreferences("login", Context.MODE_PRIVATE)
+        val isChecked = sharedPref.getBoolean("checkbox_checked", false)
+
+        if (isChecked) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         mAuth = FirebaseAuth.getInstance()
-
-        val screenSplash = installSplashScreen()
-        screenSplash.setKeepOnScreenCondition { false }
-
-        Thread.sleep(1000)
-        screenSplash.setOnExitAnimationListener { splashScreenView ->
-            val slideBack = ObjectAnimator.ofFloat(
-                splashScreenView.view,
-                View.TRANSLATION_Y,
-                0f,
-                splashScreenView.view.width.toFloat(),
-                -splashScreenView.view.width.toFloat()
-            ).apply {
-                interpolator = DecelerateInterpolator()
-                duration = 600
-                doOnEnd { splashScreenView.remove() }
-            }
-
-            val icon = splashScreenView.iconView
-            val iconAnimator = ValueAnimator
-                .ofInt(icon.height, 0)
-                .setDuration(1000)
-
-            iconAnimator.addUpdateListener {
-                val value = it.animatedValue as Int
-                icon.layoutParams.width = value
-                icon.layoutParams.height = value
-                icon.requestLayout()
-                if (value == 0) slideBack.start()
-            }
-
-            AnimatorSet().apply {
-                interpolator = AnticipateInterpolator(5f)
-                play(iconAnimator)
-                start()
-            }
-        }
-
 
         //Coge los datos de la base de datos de forma anonima
         FirebaseAuth.getInstance().signInAnonymously()
@@ -90,6 +60,21 @@ class Login : AppCompatActivity() {
             val email = binding.cogerUsuario.text.toString()+"@gmail.com"
             val password = binding.cogerContraseA.text.toString()
 
+            if (password.isBlank()) {
+                Toast.makeText(this, "El campo Contraseña no puede estar vacio", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (email.isBlank()) {
+                Toast.makeText(this, "El campo Usuario no puede estar vacio", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (email.contains(" ")) {
+                Toast.makeText(this, "El correo electrónico no puede contener espacios", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             //Paso 1. Se intenta hacer el login normal
             mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
@@ -100,56 +85,51 @@ class Login : AppCompatActivity() {
                                 MODE_PRIVATE
                             )
 
+
                         usuarioPreferencia?.edit()
-                            ?.putString("username", binding.cogerUsuario.text.toString())?.apply()
+                            ?.putString("username", binding.cogerUsuario.text.toString())
+                            ?.putString("contraseña", binding.cogerContraseA.text.toString())
+                            ?.putBoolean("checkbox_checked", binding.checkBox.isChecked)
+                            ?.apply()
 
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
-                    } else {
-                        //Paso 2. Se intenta crear una cuenta nueva ya que si el login da error es que no existe o está mal hecha
-                        Log.e(TAG, "signInWithEmailAndPassword failed", task.exception)
-                        mAuth.createUserWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(this) { task ->
-                                if (task.isSuccessful) {
-                                    //Paso 3. Si no hay problema al crear la nueva cuenta se hace login a ella
-                                    //Si no permite crearla es porque ya existe esa cuenta
-                                    mAuth.signInWithEmailAndPassword(email, password)
-                                        .addOnCompleteListener(this) { task ->
-                                            if (task.isSuccessful) {
-                                                var usuarioPreferencia =
-                                                    this?.getSharedPreferences(
-                                                        "login",
-                                                        MODE_PRIVATE
-                                                    )
-                                                usuarioPreferencia?.edit()?.putString(
-                                                    "username",
-                                                    binding.cogerUsuario.text.toString()
-                                                )?.apply()
-
-                                                val intent = Intent(this, MainActivity::class.java)
-                                                startActivity(intent)
-                                            } else {
-                                                Toast.makeText(
-                                                    this,
-                                                    "Authentication failed.",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                            }
-                                        }
                                 } else {
                                     //
                                     Toast.makeText(
                                         this,
-                                        "La cuenta que está intentando crear ya existe.\nTambién ha podido la ha puesto la contraseña mal.",
+                                        "La Contraseña/Usuario no se pueden encontrar en la base de datos",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
                             }
                     }
+
+        binding.button2.setOnClickListener {
+            val intent = Intent(this, Registracion::class.java)
+            startActivity(intent)
+        }
+
+        binding.incognito.setOnClickListener {
+            var usuarioPreferencia =
+                this?.getSharedPreferences(
+                    "login",
+                    MODE_PRIVATE
+                )
+
+            usuarioPreferencia?.edit()
+                ?.putString("username", "Anónimo")
+                ?.putString("contraseña", "")
+                ?.putBoolean("checkbox_checked", binding.checkBox.isChecked)
+                ?.apply()
+
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
                 }
         }
-    }
-}
+
+
 
 
 fun saveFirestoreDataToJson(context: Context) {
@@ -172,3 +152,41 @@ fun saveFirestoreDataToJson(context: Context) {
     }
 }
 
+/**
+val screenSplash = installSplashScreen()
+screenSplash.setKeepOnScreenCondition { false }
+
+Thread.sleep(1000)
+screenSplash.setOnExitAnimationListener { splashScreenView ->
+val slideBack = ObjectAnimator.ofFloat(
+splashScreenView.view,
+View.TRANSLATION_Y,
+0f,
+splashScreenView.view.width.toFloat(),
+-splashScreenView.view.width.toFloat()
+).apply {
+interpolator = DecelerateInterpolator()
+duration = 600
+doOnEnd { splashScreenView.remove() }
+}
+
+val icon = splashScreenView.iconView
+val iconAnimator = ValueAnimator
+.ofInt(icon.height, 0)
+.setDuration(1000)
+
+iconAnimator.addUpdateListener {
+val value = it.animatedValue as Int
+icon.layoutParams.width = value
+icon.layoutParams.height = value
+icon.requestLayout()
+if (value == 0) slideBack.start()
+}
+
+AnimatorSet().apply {
+interpolator = AnticipateInterpolator(5f)
+play(iconAnimator)
+start()
+}
+}
+ **/

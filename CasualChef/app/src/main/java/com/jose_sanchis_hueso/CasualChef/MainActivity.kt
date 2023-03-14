@@ -46,6 +46,14 @@ class MainActivity : AppCompatActivity(), OnItemClick {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
+        val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)
+        val username = sharedPrefs.getString("username", "")
+
+        if (username != null) {
+            val appName = getString(R.string.app_name)
+            val newAppName = appName.replace("CasualChef", username)
+            setTitle(newAppName)
+        }
 
         super.onCreate(savedInstanceState)
         setContentView(

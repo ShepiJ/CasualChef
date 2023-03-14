@@ -41,10 +41,14 @@ class ArticulosFragment(desarrollador: String) : Fragment() {
                 else -> GridLayoutManager(context, columnCount)
             }
 
-            val articuloList = if (desarrollador == "kneegrows") {
-                Articulo.getArticulo(requireContext(), "kneegrows")
+
+            val sharedPrefs = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
+            val username = sharedPrefs.getString("username", "")
+
+            val articuloList = if (desarrollador == username) {
+                Articulo.getArticulo(requireContext(), username)
             } else {
-                Articulo.getArticulo(requireContext()).filter { it.desarrollador != "kneegrows" }
+                Articulo.getArticulo(requireContext()).filter { it.desarrollador != username }
             }
             view.adapter = MyRecyclerViewAdapter(articuloList, listener)
         }

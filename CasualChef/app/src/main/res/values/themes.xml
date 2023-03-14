@@ -22,7 +22,7 @@
         <item name="postSplashScreenTheme">@style/Theme.CasualChef</item>
     </style>
 
-    <style name="Theme.MySplashScreen.NoActionBar">
+    <style name="Theme.MySplashScreen.NoActionBar" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>

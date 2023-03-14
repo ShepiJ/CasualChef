@@ -1,12 +1,14 @@
 package com.jose_sanchis_hueso.CasualChef.model
 
 import android.content.Context
+import android.provider.Settings.Global.getString
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.jose_sanchis_hueso.CasualChef.R
 import java.io.File
 import java.lang.reflect.Type
 import java.nio.charset.Charset
+
 
 data class Articulo(
     val id: String,
@@ -22,6 +24,9 @@ data class Articulo(
         fun getArticulo(context: Context, desarrollador: String = ""): List<Articulo> {
             val articuloList: MutableList<Articulo> = mutableListOf()
 
+            val sharedPrefs = context.getSharedPreferences("login", Context.MODE_PRIVATE)
+            val username = sharedPrefs.getString("username", "")
+
             // Read from the JSON file
             val file = File(context.filesDir, "recetas.json")
             val jsonString = file.readText(Charset.defaultCharset())
@@ -31,8 +36,8 @@ data class Articulo(
             articuloList.addAll(gson.fromJson(jsonString, listType))
 
             return when (desarrollador) {
-                "kneegrows" -> articuloList.filter { articulo -> articulo.desarrollador == desarrollador }
-                else -> articuloList.filter { articulo -> articulo.desarrollador != "kneegrows" }
+                username -> articuloList.filter { articulo -> articulo.desarrollador == desarrollador }
+                else -> articuloList.filter { articulo -> articulo.desarrollador != username }
             }
         }
 
@@ -57,5 +62,6 @@ data class Articulo(
             }
             return articulo[0]
         }
+
     }
 }

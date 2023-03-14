@@ -75,11 +75,12 @@ class OptionsFragment : Fragment() {
             FirebaseAuth.getInstance().signInAnonymously()
                 .addOnSuccessListener { authResult ->
                     val user = authResult.user
+                    val appName = getString(R.string.app_name)
                     val firestore = FirebaseFirestore.getInstance()
                     val cosas: MutableMap<String, Any> = HashMap()
                     cosas["id"] = UUID.randomUUID().toString()
                     cosas["nombre"] = binding.nombreReceta.text.toString()
-                    cosas["desarrollador"] = "cosa"
+                    cosas["desarrollador"] = appName
                     cosas["descripcion"] = binding.descripcionReceta.text.toString()
                     cosas["puntuacion"] = 0
                     cosas["tags"] = binding.tagsReceta.text.toString()
