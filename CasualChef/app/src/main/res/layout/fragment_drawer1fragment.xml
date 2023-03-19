@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".drawer1fragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="210dp"
+        android:layout_height="65dp"
+        android:layout_gravity="center|top"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:text="Build de Sangrado" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="65dp"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="140dp"
+        android:gravity="center"
+        android:text="Es una build muy común en elden ring aunque esta está creada para meter mucha presión al atacante con las garras"
+        android:textSize="15sp" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_marginBottom="80dp"
+        android:layout_width="wrap_content"
+        android:layout_height="400dp"
+        android:layout_gravity="center"
+        android:src="@drawable/casualchef" />
+</FrameLayout>

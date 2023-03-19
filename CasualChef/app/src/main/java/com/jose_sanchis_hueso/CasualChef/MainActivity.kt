@@ -18,6 +18,7 @@ import android.view.View
 import android.view.animation.AnticipateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.animation.doOnEnd
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity(), OnItemClick {
     lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
+    private lateinit var navControllerDrawer: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -61,17 +63,39 @@ class MainActivity : AppCompatActivity(), OnItemClick {
         )
         setSupportActionBar(binding.toolbar)
 
+
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment2) as NavHostFragment
 
+        val navHostFragmentDrawer =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment3) as NavHostFragment
+
+        navControllerDrawer = navHostFragmentDrawer.navController
         navController = navHostFragment.navController
+
+
+
+        //Mete el normal options
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.optionsFragment
+                R.id.optionsFragment,
             )
         )
         NavigationUI.setupWithNavController(binding.toolbar, navController, appBarConfiguration)
+
+        //Mete el drawer, lo que sale de la izquierda
+
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.vacio,
+            ),
+            binding.drawerLayout
+        )
+        NavigationUI.setupWithNavController(binding.navigationView, navControllerDrawer)
+        NavigationUI.setupWithNavController(binding.toolbar, navControllerDrawer, appBarConfiguration)
+
+
 
 // crea el json con los datos nuevos
         FirebaseAuth.getInstance().signInAnonymously()
@@ -85,6 +109,7 @@ class MainActivity : AppCompatActivity(), OnItemClick {
         return true
     }
 
+
     //Cuando selecciono una opción del options menú hace invisible el fragmento del tabbed para que no se solape y viceversa
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
@@ -95,6 +120,7 @@ class MainActivity : AppCompatActivity(), OnItemClick {
 
 
         return NavigationUI.onNavDestinationSelected(item, navController) || super.onOptionsItemSelected(item)
+
     }
 
     override fun onIntemClick(articulo: Articulo) {
