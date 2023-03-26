@@ -10,4 +10,10 @@
         android:name="com.jose_sanchis_hueso.CasualChef.OptionsFragment"
         android:label="fragment_options"
         tools:layout="@layout/fragment_options" />
+
+    <fragment
+        android:id="@+id/filtros"
+        android:name="com.jose_sanchis_hueso.CasualChef.filtros"
+        android:label="fragment_filtros"
+        tools:layout="@layout/fragment_filtros" />
 </navigation>

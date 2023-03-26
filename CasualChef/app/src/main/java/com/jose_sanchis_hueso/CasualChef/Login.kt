@@ -92,6 +92,20 @@ class Login : AppCompatActivity() {
                             ?.putBoolean("checkbox_checked", binding.checkBox.isChecked)
                             ?.apply()
 
+                        //para filtros
+                        var filtroPreferencia =
+                            this?.getSharedPreferences(
+                                "filtro",
+                                MODE_PRIVATE
+                            )
+
+
+                        filtroPreferencia?.edit()
+                            ?.putString("filtroClase", "nombre")
+                            ?.putString("valor", "testCreador")
+                            ?.apply()
+
+
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                                 } else {

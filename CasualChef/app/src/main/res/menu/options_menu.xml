@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/filtros"
+        android:title="About"
+        android:icon="@android:drawable/ic_menu_search"
+        app:showAsAction="always"
+        />
+    <item
         android:id="@+id/optionsFragment1"
         android:title="About"
         android:icon="@android:drawable/ic_menu_add"

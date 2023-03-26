@@ -3,6 +3,7 @@ package com.jose_sanchis_hueso.CasualChef
 import android.Manifest
 import android.app.Activity
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -75,12 +76,13 @@ class OptionsFragment : Fragment() {
             FirebaseAuth.getInstance().signInAnonymously()
                 .addOnSuccessListener { authResult ->
                     val user = authResult.user
-                    val appName = getString(R.string.app_name)
+                    val sharedPrefs = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
+                    val username = sharedPrefs.getString("username", "")
                     val firestore = FirebaseFirestore.getInstance()
                     val cosas: MutableMap<String, Any> = HashMap()
                     cosas["id"] = UUID.randomUUID().toString()
                     cosas["nombre"] = binding.nombreReceta.text.toString()
-                    cosas["desarrollador"] = appName
+                    cosas["desarrollador"] = username.toString()
                     cosas["descripcion"] = binding.descripcionReceta.text.toString()
                     cosas["puntuacion"] = 0
                     cosas["tags"] = binding.tagsReceta.text.toString()

@@ -1,10 +1,8 @@
 package com.jose_sanchis_hueso.CasualChef.model
 
 import android.content.Context
-import android.provider.Settings.Global.getString
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.jose_sanchis_hueso.CasualChef.R
 import java.io.File
 import java.lang.reflect.Type
 import java.nio.charset.Charset
@@ -20,6 +18,38 @@ data class Articulo(
     val descripcion: String
 ) {
     companion object {
+
+        fun getFiltro(context: Context, resultado: String = ""): List<Articulo> {
+            val articuloList: MutableList<Articulo> = mutableListOf()
+
+            val sharedPrefs = context.getSharedPreferences("filtro", Context.MODE_PRIVATE)
+            val prefFiltro = sharedPrefs.getString("filtroClase", "")
+            val prefValor = sharedPrefs.getString("valor", "")
+
+            // Read from the JSON file
+            val file = File(context.filesDir, "recetas.json")
+            val jsonString = file.readText(Charset.defaultCharset())
+
+            val listType: Type = object : TypeToken<MutableList<Articulo?>?>() {}.type
+            val gson = Gson()
+            articuloList.addAll(gson.fromJson(jsonString, listType))
+
+            return when (prefFiltro) {
+                "tags" -> {
+                    when (resultado) {
+                        prefValor -> articuloList.filter { articulo -> articulo.tags.contains(resultado, ignoreCase = true)}
+                        else -> articuloList.filter { articulo -> articulo.tags.contains(resultado, ignoreCase = true) }
+                    }
+                }
+                "nombre" -> {
+                    when (resultado) {
+                        prefValor -> articuloList.filter { articulo -> articulo.nombre.contains(resultado, ignoreCase = true) }
+                        else -> articuloList.filter { articulo -> articulo.nombre.contains(resultado, ignoreCase = true)}
+                    }
+                }
+                else -> throw IllegalArgumentException("Propiedad inválida")
+            }
+        }
 
         fun getArticulo(context: Context, desarrollador: String = ""): List<Articulo> {
             val articuloList: MutableList<Articulo> = mutableListOf()
