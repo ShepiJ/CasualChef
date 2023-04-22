@@ -21,6 +21,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.animation.doOnEnd
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
@@ -104,6 +105,20 @@ class MainActivity : AppCompatActivity(), OnItemClick {
             }
     }
 
+    override fun onResume() {
+        super.onResume()
+        navControllerDrawer.navigate(R.id.vacio)
+
+        val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)
+        val username = sharedPrefs.getString("username", "")
+
+        if (username != null) {
+            val appName = getString(R.string.app_name)
+            val newAppName = appName.replace("CasualChef", username)
+            setTitle(newAppName)
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.options_menu,menu)
         return true
@@ -113,10 +128,21 @@ class MainActivity : AppCompatActivity(), OnItemClick {
     //Cuando selecciono una opción del options menú hace invisible el fragmento del tabbed para que no se solape y viceversa
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
+        when (item.itemId) {
+            R.id.optionsFragment1 -> {
+                val intent = Intent(this, Crear::class.java)
+                startActivity(intent)
+                /**
+                binding.navHostFragment.visibility = View.INVISIBLE
 
-            binding.navHostFragment.visibility = View.INVISIBLE
-
-            binding.navHostFragment2.visibility = View.VISIBLE
+                binding.navHostFragment2.visibility = View.VISIBLE
+                **/
+            }
+            R.id.filtros -> {
+                val intent = Intent(this, FiltroActivity::class.java)
+                startActivity(intent)
+            }
+        }
 
 
         return NavigationUI.onNavDestinationSelected(item, navController) || super.onOptionsItemSelected(item)

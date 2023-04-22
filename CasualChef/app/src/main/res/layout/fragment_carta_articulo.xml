@@ -20,32 +20,17 @@
             android:layout_width="174dp"
             android:layout_height="31dp"
             android:layout_marginTop="14dp"
-            android:layout_marginBottom="9dp"
             android:gravity="center"
             android:text="developer del juego"
             android:textColor="@color/white"
             android:textSize="12sp"
-            app:layout_constraintBottom_toTopOf="@+id/estrellas"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/tvTituloVideojuegos"
             app:layout_constraintHorizontal_bias="0.45"
             app:layout_constraintStart_toStartOf="@+id/tvTituloVideojuegos"
             app:layout_constraintTop_toBottomOf="@+id/tvTituloVideojuegos" />
 
-        <RatingBar
-            android:id="@+id/estrellas"
-            style="?android:attr/ratingBarStyleSmall"
-            android:layout_width="160dp"
-            android:layout_height="15dp"
-            android:layout_marginTop="9dp"
-            android:layout_marginBottom="16dp"
-            android:max="10"
-            android:progressBackgroundTint="#00FFEA"
-            android:progressTint="#ECF400"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/tvTituloVideojuegos"
-            app:layout_constraintHorizontal_bias="0.473"
-            app:layout_constraintStart_toStartOf="@+id/tvTituloVideojuegos"
-            app:layout_constraintTop_toBottomOf="@+id/tvDeveloper" />
+
 
         <TextView
             android:id="@+id/tvTituloVideojuegos"

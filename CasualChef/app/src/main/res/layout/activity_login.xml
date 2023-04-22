@@ -133,7 +133,7 @@
         app:layout_constraintEnd_toStartOf="@+id/textView6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView6"
-        app:srcCompat="@drawable/nicepng_google_chrome_logo_png_1415218"
+        app:srcCompat="@drawable/incognito"
         tools:ignore="SpeakableTextPresentCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

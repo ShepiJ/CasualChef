@@ -23,6 +23,7 @@ import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.jose_sanchis_hueso.CasualChef.databinding.ActivityCrearBinding
 import com.jose_sanchis_hueso.CasualChef.databinding.ActivityMainBinding
 import com.jose_sanchis_hueso.CasualChef.databinding.FragmentOptionsBinding
 import java.io.ByteArrayOutputStream
@@ -35,7 +36,7 @@ import kotlin.system.exitProcess
 
 class OptionsFragment : Fragment() {
     private lateinit var binding: FragmentOptionsBinding
-    private lateinit var binding2: ActivityMainBinding
+    private lateinit var binding2: ActivityCrearBinding
     private var imageUri: Uri? = null
 
     companion object {
@@ -54,7 +55,6 @@ class OptionsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding2 = (activity as MainActivity).binding
 
         // pide acceso a archivos y tal, sin esto no podria mandar imagenes
         if (ContextCompat.checkSelfPermission(
@@ -83,8 +83,8 @@ class OptionsFragment : Fragment() {
                     cosas["id"] = UUID.randomUUID().toString()
                     cosas["nombre"] = binding.nombreReceta.text.toString()
                     cosas["desarrollador"] = username.toString()
+                    cosas["ingredientes"] = binding.ingredientesReceta.text.toString()
                     cosas["descripcion"] = binding.descripcionReceta.text.toString()
-                    cosas["puntuacion"] = 0
                     cosas["tags"] = binding.tagsReceta.text.toString()
 
                     // Upload the selected image to Firebase Storage
@@ -117,8 +117,8 @@ class OptionsFragment : Fragment() {
                                     )
                                         .show()
                                     Handler().postDelayed({
-                                        binding2.navHostFragment.visibility = View.VISIBLE
-                                        binding2.navHostFragment2.visibility = View.INVISIBLE
+                                        val intent = Intent(requireContext(), MainActivity::class.java)
+                                        startActivity(intent)
                                     }, 2000)
                                 }
                                 .addOnFailureListener { e ->
@@ -141,11 +141,6 @@ class OptionsFragment : Fragment() {
                 }
 
 
-        }
-
-        binding.btnVolver.setOnClickListener {
-            binding2.navHostFragment.visibility = View.VISIBLE
-            binding2.navHostFragment2.visibility = View.INVISIBLE
         }
 
         binding.imagenSeleccion.setOnClickListener {

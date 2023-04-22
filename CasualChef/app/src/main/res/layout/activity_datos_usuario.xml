@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_principal"
+    tools:context=".ActivityDatos_Usuario">
+
+    <TextView
+        android:id="@+id/usuarioUsu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="usuarioUsu"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/nombreUsu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imagenUsu" />
+
+    <ImageView
+        android:id="@+id/imagenUsu"
+        android:layout_width="162dp"
+        android:layout_height="145dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@+id/usuarioUsu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/user" />
+
+    <TextView
+        android:id="@+id/nombreUsu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="nombreUsu"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/apellidoUsu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/usuarioUsu" />
+
+    <TextView
+        android:id="@+id/apellidoUsu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="apellidoUsu"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/emailUsu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nombreUsu" />
+
+    <TextView
+        android:id="@+id/emailUsu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="emailUsu"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/telefonoUsu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/apellidoUsu" />
+
+    <TextView
+        android:id="@+id/telefonoUsu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="telefonoUsu"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/textView15"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailUsu" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Usuario:"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/usuarioUsu"
+        app:layout_constraintEnd_toStartOf="@+id/usuarioUsu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/usuarioUsu" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email:"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/emailUsu"
+        app:layout_constraintEnd_toStartOf="@+id/emailUsu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/emailUsu" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Telefono:"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/telefonoUsu"
+        app:layout_constraintEnd_toStartOf="@+id/telefonoUsu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/telefonoUsu" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nombre:"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/nombreUsu"
+        app:layout_constraintEnd_toStartOf="@+id/nombreUsu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/nombreUsu" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Apellido:"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/apellidoUsu"
+        app:layout_constraintEnd_toStartOf="@+id/apellidoUsu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/apellidoUsu" />
+
+    <TextView
+        android:id="@+id/descripcionUsu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:text="@string/loremIpsum"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="30dp"
+        android:text="Sobre mi:"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/descripcionUsu"
+        app:layout_constraintEnd_toEndOf="@+id/textView12"
+        app:layout_constraintHorizontal_bias="0.464"
+        app:layout_constraintStart_toStartOf="@+id/descripcionUsu"
+        app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+    <ImageButton
+        android:id="@+id/editDescriUsu"
+        android:layout_width="45dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="20dp"
+        android:backgroundTint="@color/background_principal"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/textView15"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView15"
+        app:layout_constraintVertical_bias="0.444"
+        app:srcCompat="@drawable/editar"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <ImageButton
+        android:id="@+id/editTelefUsu"
+        android:layout_width="45dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="20dp"
+        android:backgroundTint="@color/background_principal"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/telefonoUsu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/telefonoUsu"
+        app:srcCompat="@drawable/editar"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
+
+    <ImageButton
+        android:id="@+id/editEmailUsu"
+        android:layout_width="45dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="20dp"
+        android:backgroundTint="@color/background_principal"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/emailUsu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/emailUsu"
+        app:srcCompat="@drawable/editar"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
+
+    <ImageButton
+        android:id="@+id/editApellidoUsu"
+        android:layout_width="45dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="20dp"
+        android:backgroundTint="@color/background_principal"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/apellidoUsu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/apellidoUsu"
+        app:srcCompat="@drawable/editar"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
+
+    <ImageButton
+        android:id="@+id/editNombreUsu"
+        android:layout_width="45dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="20dp"
+        android:backgroundTint="@color/background_principal"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/nombreUsu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/nombreUsu"
+        app:srcCompat="@drawable/editar"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <ImageButton
+        android:id="@+id/editImgUsu"
+        android:layout_width="45dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="20dp"
+        android:backgroundTint="@color/background_principal"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/imagenUsu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imagenUsu"
+        app:srcCompat="@drawable/editar"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
+
+    <Button
+        android:id="@+id/pasarMain"
+        android:layout_width="86dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="#918C8C"
+        android:backgroundTint="#918C8C"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:text="Guardar Cambios"
+        android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@+id/usuarioUsu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imagenUsu" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@+id/textView15"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/telefonoUsu" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

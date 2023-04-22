@@ -14,4 +14,14 @@
         android:name="com.jose_sanchis_hueso.CasualChef.vacio"
         android:label="fragment_vacio"
         tools:layout="@layout/fragment_vacio" />
+    <fragment
+        android:id="@+id/drawer2fragment2"
+        android:name="com.jose_sanchis_hueso.CasualChef.drawer2fragment2"
+        android:label="fragment_drawer2fragment2"
+        tools:layout="@layout/fragment_drawer2fragment2" />
+    <fragment
+        android:id="@+id/drawer3fragment2"
+        android:name="com.jose_sanchis_hueso.CasualChef.drawer3fragment2"
+        android:label="fragment_drawer3fragment2"
+        tools:layout="@layout/fragment_drawer3fragment2" />
 </navigation>

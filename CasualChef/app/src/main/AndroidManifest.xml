@@ -17,6 +17,30 @@
         android:theme="@style/Theme.MySplashScreen"
         tools:targetApi="31">
         <activity
+            android:name=".Crear"
+            android:exported="false"
+            android:theme="@style/Theme.MySplashScreen.NoActionBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".ActivityPreferencias_Interfaz"
+            android:exported="false"
+            android:theme="@style/Theme.MySplashScreen.NoActionBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".ActivityDatos_Usuario"
+            android:exported="false"
+            android:theme="@style/Theme.MySplashScreen.NoActionBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".FiltroActivity"
             android:exported="false"
             android:theme="@style/Theme.MySplashScreen.NoActionBar">

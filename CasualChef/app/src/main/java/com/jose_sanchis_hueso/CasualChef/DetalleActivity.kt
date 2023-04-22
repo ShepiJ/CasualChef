@@ -26,6 +26,7 @@ class DetalleActivity : AppCompatActivity() {
         val tvNombre = binding.tvNombre
         val tvDeveloper = binding.tvDeveloper
         val tvTag1 = binding.tvTag1
+        val tvIngredients = binding.tvIngredientes
         val tvDescripcion = binding.tvDescripcion
 
         val bitmap = articulo.imagen.ponerImagen(this)
@@ -38,6 +39,7 @@ class DetalleActivity : AppCompatActivity() {
         tvNombre.text = articulo.nombre
         tvDeveloper.text = articulo.desarrollador
         tvTag1.text = articulo.tags
+        tvIngredients.text = articulo.ingredientes
         tvDescripcion.text = articulo.descripcion
     }
 }

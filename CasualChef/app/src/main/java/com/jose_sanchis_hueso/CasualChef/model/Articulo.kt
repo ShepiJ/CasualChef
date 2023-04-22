@@ -13,9 +13,9 @@ data class Articulo(
     val nombre: String,
     val desarrollador: String,
     val tags: String,
-    val puntuacion: Float,
     val imagen: String,
-    val descripcion: String
+    val descripcion: String,
+    val ingredientes: String
 ) {
     companion object {
 

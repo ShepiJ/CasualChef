@@ -35,8 +35,8 @@ class MyRecyclerViewAdapter(
         Log.d("ArticulosFragmentLog", "idEKISDE = ${articulo.id}")
         holder.tvNombre.text = articulo.nombre
         holder.tvDesarrollador.text = articulo.desarrollador
-        holder.ratingBar.numStars = 10
-        holder.ratingBar.rating = articulo.puntuacion
+        //holder.ratingBar.numStars = 10
+        //holder.ratingBar.rating = articulo.puntuacion
 
         val bitmap = articulo.imagen.ponerImagen(holder.ivArticulo.context)
         if (bitmap != null) {
@@ -55,7 +55,7 @@ class MyRecyclerViewAdapter(
 
         val tvNombre: TextView = binding.tvTituloVideojuegos
         val tvDesarrollador: TextView = binding.tvDeveloper
-        val ratingBar: RatingBar = binding.estrellas
+        //val ratingBar: RatingBar = binding.estrellas
         val ivArticulo: ImageView = binding.ivVideojuego
 
         override fun toString(): String {
