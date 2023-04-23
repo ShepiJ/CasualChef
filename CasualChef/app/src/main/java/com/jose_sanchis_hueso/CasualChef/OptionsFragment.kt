@@ -88,7 +88,7 @@ class OptionsFragment : Fragment() {
                     cosas["tags"] = binding.tagsReceta.text.toString()
 
                     // Upload the selected image to Firebase Storage
-                    var imagenID:String=UUID.randomUUID().toString()
+                    var imagenID:String=UUID.randomUUID().toString()+".png"
 
                     val storageRef =
                         FirebaseStorage.getInstance().reference.child("images/${imagenID}")

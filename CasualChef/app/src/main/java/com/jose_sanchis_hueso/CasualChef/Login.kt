@@ -98,14 +98,17 @@ class Login : AppCompatActivity() {
                                 "filtro",
                                 MODE_PRIVATE
                             )
-
-
                         filtroPreferencia?.edit()
                             ?.putString("filtroClase", "nombre")
                             ?.putString("valor", "testCreador")
                             ?.apply()
 
 
+
+
+
+
+                        //Ir al main
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                                 } else {

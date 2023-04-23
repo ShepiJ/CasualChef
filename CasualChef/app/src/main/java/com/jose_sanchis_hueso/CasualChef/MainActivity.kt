@@ -149,6 +149,7 @@ class MainActivity : AppCompatActivity(), OnItemClick {
 
     }
 
+
     override fun onIntemClick(articulo: Articulo) {
                 abrirDetalle(articulo.id)
 

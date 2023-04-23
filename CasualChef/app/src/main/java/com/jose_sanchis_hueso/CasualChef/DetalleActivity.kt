@@ -2,6 +2,7 @@ package com.jose_sanchis_hueso.CasualChef
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.google.firebase.storage.FirebaseStorage
 import com.jose_sanchis_hueso.CasualChef.databinding.ActivityDetalleBinding
 import com.jose_sanchis_hueso.CasualChef.model.Articulo
 import ponerImagen
@@ -29,11 +30,17 @@ class DetalleActivity : AppCompatActivity() {
         val tvIngredients = binding.tvIngredientes
         val tvDescripcion = binding.tvDescripcion
 
-        val bitmap = articulo.imagen.ponerImagen(this)
-        if (bitmap != null) {
-            imageView.setImageBitmap(bitmap)
-        } else {
-            imageView.setImageResource(R.drawable.casualchef)
+        //val imageUrl = "gs://casualchef.appspot.com/images/${articulo.imagen}"
+        //articulo.imagen.ponerImagen(this, imageUrl, imageView)
+
+        val storageRef = FirebaseStorage.getInstance().reference.child("images/${articulo.imagen}")
+        storageRef.downloadUrl.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val imageUrl = task.result.toString()
+                articulo.imagen.ponerImagen(this, imageUrl, imageView)
+            } else {
+                imageView.setImageResource(R.drawable.casualchef)
+            }
         }
 
         tvNombre.text = articulo.nombre

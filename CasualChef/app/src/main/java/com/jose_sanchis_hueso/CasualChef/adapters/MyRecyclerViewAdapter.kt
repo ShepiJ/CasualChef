@@ -9,6 +9,8 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageException
 import com.jose_sanchis_hueso.CasualChef.R
 import com.jose_sanchis_hueso.CasualChef.databinding.FragmentCartaArticuloBinding
 import com.jose_sanchis_hueso.CasualChef.model.Articulo
@@ -38,12 +40,21 @@ class MyRecyclerViewAdapter(
         //holder.ratingBar.numStars = 10
         //holder.ratingBar.rating = articulo.puntuacion
 
-        val bitmap = articulo.imagen.ponerImagen(holder.ivArticulo.context)
-        if (bitmap != null) {
-            holder.ivArticulo.setImageBitmap(bitmap)
-        } else {
-            holder.ivArticulo.setImageResource(R.drawable.casualchef)
+
+        //val imageUrl = "gs://casualchef.appspot.com/images/${articulo.imagen}"
+        //articulo.imagen.ponerImagen(holder.ivArticulo.context, imageUrl, holder.ivArticulo)
+
+        val storageRef = FirebaseStorage.getInstance().reference.child("images/${articulo.imagen}")
+        storageRef.downloadUrl.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val imageUrl = task.result.toString()
+                articulo.imagen.ponerImagen(holder.ivArticulo.context, imageUrl, holder.ivArticulo)
+            } else {
+                holder.ivArticulo.setImageResource(R.drawable.casualchef)
+            }
         }
+
+
 
         holder.itemView.tag = articulo
         holder.itemView.setOnClickListener(holder)
