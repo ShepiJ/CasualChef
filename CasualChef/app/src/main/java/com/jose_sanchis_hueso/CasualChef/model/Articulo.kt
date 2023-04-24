@@ -38,13 +38,31 @@ data class Articulo(
                 "tags" -> {
                     when (resultado) {
                         prefValor -> articuloList.filter { articulo -> articulo.tags.contains(resultado, ignoreCase = true)}
-                        else -> articuloList.filter { articulo -> articulo.tags.contains(resultado, ignoreCase = true) }
+                        else -> articuloList.filter { articulo -> !articulo.tags.contains(resultado, ignoreCase = true) }
                     }
                 }
                 "nombre" -> {
                     when (resultado) {
                         prefValor -> articuloList.filter { articulo -> articulo.nombre.contains(resultado, ignoreCase = true) }
-                        else -> articuloList.filter { articulo -> articulo.nombre.contains(resultado, ignoreCase = true)}
+                        else -> articuloList.filter { articulo -> !articulo.nombre.contains(resultado, ignoreCase = true)}
+                    }
+                }
+                "autor" -> {
+                    when (resultado) {
+                        prefValor -> articuloList.filter { articulo -> articulo.desarrollador.contains(resultado, ignoreCase = true) }
+                        else -> articuloList.filter { articulo -> !articulo.desarrollador.contains(resultado, ignoreCase = true)}
+                    }
+                }
+                "ingredientes" -> {
+                    when (resultado) {
+                        prefValor -> articuloList.filter { articulo -> articulo.ingredientes.contains(resultado, ignoreCase = true) }
+                        else -> articuloList.filter { articulo -> !articulo.ingredientes.contains(resultado, ignoreCase = true)}
+                    }
+                }
+                "descripcion" -> {
+                    when (resultado) {
+                        prefValor -> articuloList.filter { articulo -> articulo.descripcion.contains(resultado, ignoreCase = true) }
+                        else -> articuloList.filter { articulo -> !articulo.descripcion.contains(resultado, ignoreCase = true) }
                     }
                 }
                 else -> throw IllegalArgumentException("Propiedad inválida")

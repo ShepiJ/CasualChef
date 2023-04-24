@@ -1,10 +1,8 @@
 package com.jose_sanchis_hueso.CasualChef
 
-import android.content.ContentValues
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.jose_sanchis_hueso.CasualChef.databinding.ActivityRegistracionBinding
@@ -25,7 +23,7 @@ class Registracion : AppCompatActivity() {
         //Coge los datos de la base de datos de forma anonima
         FirebaseAuth.getInstance().signInAnonymously()
             .addOnSuccessListener { authResult ->
-                saveFirestoreDataToJson(this)
+                guardarColeccionJson(this,"recetas","recetas.json")
             }
 
 //El usuario no puede poner un nombre con espacios.

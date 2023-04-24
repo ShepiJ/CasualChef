@@ -1,5 +1,6 @@
 package com.jose_sanchis_hueso.CasualChef
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.firebase.storage.FirebaseStorage
@@ -16,6 +17,21 @@ class DetalleActivity : AppCompatActivity() {
             ActivityDetalleBinding.inflate(layoutInflater).also { binding = it }.root
         )
         cargarVideoJuego()
+
+        binding.tvDeveloper.setOnClickListener{
+
+            var usuarioPreferencia =
+                this?.getSharedPreferences(
+                    "usuario",
+                    MODE_PRIVATE
+                )
+            usuarioPreferencia?.edit()
+                ?.putString("username", binding.tvDeveloper.text.toString())
+                ?.apply()
+
+            val intent = Intent(this, ActivityDatos_UsuarioLite::class.java)
+            startActivity(intent)
+        }
 
     }
 

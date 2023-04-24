@@ -1,16 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_principal"
-    tools:context=".FiltroActivity">
+    tools:context=".FiltroActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/textoFiltrar"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text=""
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="41dp" />
+
+        <Spinner
+            android:id="@+id/spinnerFiltro"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/buttonFiltrar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Filtrar" />
+
+
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.fragment.app.FragmentContainerView
@@ -21,5 +53,6 @@
             app:defaultNavHost="true"
             app:navGraph="@navigation/tabbed_graph_filtros" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

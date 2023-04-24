@@ -51,6 +51,9 @@ class ArticulosFragmentFiltro(opcion: String) : Fragment() {
                     when (prefFiltro) {
                         "tags" -> it.tags.contains(prefValor.toString(), ignoreCase = true)
                         "nombre" -> it.nombre.contains(prefValor.toString(), ignoreCase = true)
+                        "autor" -> it.desarrollador.contains(prefValor.toString(), ignoreCase = true)
+                        "ingredientes" -> it.ingredientes.contains(prefValor.toString(), ignoreCase = true)
+                        "descripcion" -> it.descripcion.contains(prefValor.toString(), ignoreCase = true)
                         else -> throw IllegalArgumentException("Propiedad inválida")
                     }
                 }

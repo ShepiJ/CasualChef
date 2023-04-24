@@ -1,32 +1,16 @@
 package com.jose_sanchis_hueso.CasualChef
 
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.view.animation.AnticipateInterpolator
-import android.view.animation.DecelerateInterpolator
 import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.animation.doOnEnd
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.GsonBuilder
 import com.jose_sanchis_hueso.CasualChef.databinding.ActivityLoginBinding
 import java.io.OutputStream
+import kotlin.collections.HashMap
 
 class Login : AppCompatActivity() {
 
@@ -52,7 +36,7 @@ class Login : AppCompatActivity() {
         //Coge los datos de la base de datos de forma anonima
         FirebaseAuth.getInstance().signInAnonymously()
             .addOnSuccessListener { authResult ->
-                saveFirestoreDataToJson(this)
+                guardarColeccionJson(this,"recetas","recetas.json")
             }
 
 //El usuario no puede poner un nombre con espacios.
@@ -99,13 +83,48 @@ class Login : AppCompatActivity() {
                                 MODE_PRIVATE
                             )
                         filtroPreferencia?.edit()
-                            ?.putString("filtroClase", "nombre")
-                            ?.putString("valor", "testCreador")
+                            ?.putString("filtroClase", "autor")
+                            ?.putString("valor", "paquito")
                             ?.apply()
 
 
+                        //Generando los datos usuario
 
+                        FirebaseAuth.getInstance().signInAnonymously()
+                            .addOnSuccessListener { authResult ->
+                                val user = authResult.user
+                                val sharedPrefs = this.getSharedPreferences(
+                                    "login",
+                                    Context.MODE_PRIVATE
+                                )
+                                val username = sharedPrefs.getString("username", "")
+                                val firestore = FirebaseFirestore.getInstance()
 
+                                // Check if a document already exists for the user
+                                firestore.collection("datos_usuario")
+                                    .whereEqualTo("usuario", username.toString())
+                                    .get()
+                                    .addOnSuccessListener { querySnapshot ->
+                                        if (querySnapshot.isEmpty) {
+                                            // If no documents exist, add a new one
+                                            val datos_usuario_Nuevo: MutableMap<String, Any> = HashMap()
+                                            datos_usuario_Nuevo["usuario"] = username.toString()
+                                            datos_usuario_Nuevo["nombre"] = "default"
+                                            datos_usuario_Nuevo["apellido"] = "default"
+                                            datos_usuario_Nuevo["email"] = "default"
+                                            datos_usuario_Nuevo["telefono"] = "default"
+                                            datos_usuario_Nuevo["imagen"] = "default"
+                                            datos_usuario_Nuevo["descripcion"] = "default"
+
+                                            firestore.collection("datos_usuario").add(datos_usuario_Nuevo)
+                                        }
+                                    }
+                            }
+
+                        FirebaseAuth.getInstance().signInAnonymously()
+                            .addOnSuccessListener { authResult ->
+                                guardarColeccionJson(this,"datos_usuario","usuarios.json")
+                            }
 
 
                         //Ir al main
@@ -149,10 +168,10 @@ class Login : AppCompatActivity() {
 
 
 
-fun saveFirestoreDataToJson(context: Context) {
+fun guardarColeccionJson(context: Context,coleccion: String,nombreFichero: String) {
     val db = FirebaseFirestore.getInstance()
 
-    db.collection("recetas").get().addOnSuccessListener { querySnapshot ->
+    db.collection(coleccion).get().addOnSuccessListener { querySnapshot ->
         val articleList = mutableListOf<Map<String, Any>>()
 
         for (document in querySnapshot) {
@@ -163,7 +182,7 @@ fun saveFirestoreDataToJson(context: Context) {
         val json = gson.toJson(articleList)
 
         val outputStream: OutputStream =
-            context.openFileOutput("recetas.json", Context.MODE_PRIVATE)
+            context.openFileOutput(nombreFichero, Context.MODE_PRIVATE)
         outputStream.write(json.toByteArray())
         outputStream.close()
     }

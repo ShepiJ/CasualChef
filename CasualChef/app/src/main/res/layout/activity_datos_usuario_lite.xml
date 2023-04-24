@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_principal"
-    tools:context=".ActivityDatos_Usuario">
+    tools:context=".ActivityDatos_UsuarioLite">
 
     <TextView
         android:id="@+id/usuarioUsu"
@@ -157,85 +157,6 @@
         app:layout_constraintHorizontal_bias="0.464"
         app:layout_constraintStart_toStartOf="@+id/descripcionUsu"
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
-    <ImageButton
-        android:id="@+id/editDescriUsu"
-        android:layout_width="45dp"
-        android:layout_height="37dp"
-        android:layout_marginEnd="20dp"
-        android:backgroundTint="@color/background_principal"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="@+id/textView15"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView15"
-        app:layout_constraintVertical_bias="0.444"
-        app:srcCompat="@drawable/editar"
-        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-    <ImageButton
-        android:id="@+id/editTelefUsu"
-        android:layout_width="45dp"
-        android:layout_height="37dp"
-        android:layout_marginEnd="20dp"
-        android:backgroundTint="@color/background_principal"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="@+id/telefonoUsu"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/telefonoUsu"
-        app:srcCompat="@drawable/editar"
-        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
-
-    <ImageButton
-        android:id="@+id/editEmailUsu"
-        android:layout_width="45dp"
-        android:layout_height="37dp"
-        android:layout_marginEnd="20dp"
-        android:backgroundTint="@color/background_principal"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="@+id/emailUsu"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/emailUsu"
-        app:srcCompat="@drawable/editar"
-        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
-
-    <ImageButton
-        android:id="@+id/editApellidoUsu"
-        android:layout_width="45dp"
-        android:layout_height="37dp"
-        android:layout_marginEnd="20dp"
-        android:backgroundTint="@color/background_principal"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="@+id/apellidoUsu"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/apellidoUsu"
-        app:srcCompat="@drawable/editar"
-        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
-
-    <ImageButton
-        android:id="@+id/editNombreUsu"
-        android:layout_width="45dp"
-        android:layout_height="37dp"
-        android:layout_marginEnd="20dp"
-        android:backgroundTint="@color/background_principal"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="@+id/nombreUsu"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/nombreUsu"
-        app:srcCompat="@drawable/editar"
-        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-    <ImageButton
-        android:id="@+id/editImgUsu"
-        android:layout_width="45dp"
-        android:layout_height="37dp"
-        android:layout_marginEnd="20dp"
-        android:backgroundTint="@color/background_principal"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="@+id/imagenUsu"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imagenUsu"
-        app:srcCompat="@drawable/editar"
-        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
 
     <Button
         android:id="@+id/pasarMain"

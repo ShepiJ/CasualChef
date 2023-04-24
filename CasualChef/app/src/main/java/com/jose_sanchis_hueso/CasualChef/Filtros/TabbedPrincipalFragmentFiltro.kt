@@ -28,6 +28,16 @@ class TabbedPrincipalFragmentFiltro : Fragment() {
 
             binding.viewPager.adapter = PageAdapter(requireContext(), this)
 
+            TabLayoutMediator(
+                binding.tabLayout, binding.viewPager
+            ) {tab, position ->
+                when (position){
+                    0 -> tab.text = "Filtrado"
+                    1 -> tab.text = "Otros"
+                    else -> tab.text = "Otros"
+                }
+            }.attach()
+
 
         }
 

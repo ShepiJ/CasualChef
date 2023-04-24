@@ -15,3 +15,10 @@ fun String.ponerImagen(context: Context, imageUrl: String, imageView: ImageView)
         .placeholder(R.drawable.casualchef)
         .into(imageView)
 }
+
+fun String.ponerImagenUsuario(context: Context, imageUrl: String, imageView: ImageView){
+    Glide.with(context)
+        .load(imageUrl)
+        .placeholder(R.drawable.user)
+        .into(imageView)
+}
