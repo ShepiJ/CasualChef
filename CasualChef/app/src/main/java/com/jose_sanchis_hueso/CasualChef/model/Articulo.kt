@@ -15,7 +15,10 @@ data class Articulo(
     val tags: String,
     val imagen: String,
     val descripcion: String,
-    val ingredientes: String
+    val ingredientes: String,
+    val condiciones: List<Boolean>,
+    val dificultad: Double,
+    val tiempoPrep: String
 ) {
     companion object {
 

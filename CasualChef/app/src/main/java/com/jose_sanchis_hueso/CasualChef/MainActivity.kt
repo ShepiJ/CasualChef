@@ -124,6 +124,18 @@ class MainActivity : AppCompatActivity(), OnItemClick {
         return true
     }
 
+    override fun onBackPressed() {
+        navControllerDrawer.navigate(R.id.vacio)
+
+        val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)
+        val username = sharedPrefs.getString("username", "")
+
+        if (username != null) {
+            val appName = getString(R.string.app_name)
+            val newAppName = appName.replace("CasualChef", username)
+            setTitle(newAppName)
+        }
+    }
 
     //Cuando selecciono una opción del options menú hace invisible el fragmento del tabbed para que no se solape y viceversa
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

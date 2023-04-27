@@ -84,7 +84,7 @@ class Login : AppCompatActivity() {
                             )
                         filtroPreferencia?.edit()
                             ?.putString("filtroClase", "autor")
-                            ?.putString("valor", "paquito")
+                            ?.putString("valor", "")
                             ?.apply()
 
 

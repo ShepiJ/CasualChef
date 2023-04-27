@@ -28,22 +28,11 @@ class TabbedPrincipalFragmentFiltro : Fragment() {
 
             binding.viewPager.adapter = PageAdapter(requireContext(), this)
 
-            TabLayoutMediator(
-                binding.tabLayout, binding.viewPager
-            ) {tab, position ->
-                when (position){
-                    0 -> tab.text = "Filtrado"
-                    1 -> tab.text = "Otros"
-                    else -> tab.text = "Otros"
-                }
-            }.attach()
-
-
         }
 
         class PageAdapter(private val context: Context, fragment: Fragment) : FragmentStateAdapter(fragment) {
 
-            override fun getItemCount(): Int = 2
+            override fun getItemCount(): Int = 1
 
             override fun createFragment(position: Int): Fragment {
                 val sharedPrefs = context?.getSharedPreferences("filtro", Context.MODE_PRIVATE)
@@ -52,8 +41,7 @@ class TabbedPrincipalFragmentFiltro : Fragment() {
                 //Dependiendo de que posicion esté el fragmento cargará los articulos dependiendo del tipo que tengas
                 return when(position){
                     0 -> ArticulosFragmentFiltro(prefValor.toString())
-                    1 -> ArticulosFragmentFiltro("otro")
-                    else -> ArticulosFragmentFiltro("otro")
+                    else -> ArticulosFragmentFiltro(prefValor.toString())
                 }
             }
         }

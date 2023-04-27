@@ -56,6 +56,10 @@ class FiltroActivity : AppCompatActivity() , OnItemClick {
 
     }
 
+    override fun onBackPressed() {
+        val intent = Intent(this,MainActivity::class.java)
+        startActivity(intent)
+    }
 
     private fun abrirDetalle(id:String) {
 

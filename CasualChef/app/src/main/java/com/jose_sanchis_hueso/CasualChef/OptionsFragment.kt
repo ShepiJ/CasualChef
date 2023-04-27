@@ -12,26 +12,26 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.jose_sanchis_hueso.CasualChef.databinding.ActivityCrearBinding
-import com.jose_sanchis_hueso.CasualChef.databinding.ActivityMainBinding
 import com.jose_sanchis_hueso.CasualChef.databinding.FragmentOptionsBinding
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
-import kotlin.collections.HashMap
-import kotlin.system.exitProcess
 
 
 class OptionsFragment : Fragment() {
@@ -71,7 +71,63 @@ class OptionsFragment : Fragment() {
             // permission already granted, do something here
         }
 
+        //Los watcher para no poner más horas de las pedidas
+        val horasEditText: EditText = binding.horas
+        val minutosEditText: EditText = binding.minutos
+
+        horasEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if (!s.toString().isEmpty() && s.toString().toInt() > 24) {
+                    horasEditText.setText("24")
+                    horasEditText.setSelection(horasEditText.text.length)
+                }
+            }
+
+            override fun afterTextChanged(s: Editable) {}
+        })
+        minutosEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if (!s.toString().isEmpty() && s.toString().toInt() > 60) {
+                    minutosEditText.setText("60")
+                    minutosEditText.setSelection(minutosEditText.text.length)
+                }
+            }
+
+            override fun afterTextChanged(s: Editable) {}
+        })
+
+        horasEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val text = horasEditText.text.toString().padStart(2, '0')
+                horasEditText.setText(text)
+            }
+        }
+
+        minutosEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val text = minutosEditText.text.toString().padStart(2, '0')
+                minutosEditText.setText(text)
+            }
+        }
+
         binding.btnMandar.setOnClickListener {
+
+            //Checkeos por de que algo no hay nada sin escribir
+            if(binding.nombreReceta.text.isNotEmpty() &&
+                binding.ingredientesReceta.text.isNotEmpty() &&
+                binding.descripcionReceta.text.isNotEmpty() &&
+                binding.tagsReceta.text.isNotEmpty() &&
+                binding.horas.text.isNotEmpty() &&
+                binding.minutos.text.isNotEmpty() &&
+                imageUri != null) {
+
+            // Para evitar mandar más de una publicacion a la vez
+            binding.btnMandar.isEnabled = false
+
+
+
 
             FirebaseAuth.getInstance().signInAnonymously()
                 .addOnSuccessListener { authResult ->
@@ -86,6 +142,18 @@ class OptionsFragment : Fragment() {
                     cosas["ingredientes"] = binding.ingredientesReceta.text.toString()
                     cosas["descripcion"] = binding.descripcionReceta.text.toString()
                     cosas["tags"] = binding.tagsReceta.text.toString()
+                    val condiciones = listOf(
+                        binding.bool1.isChecked,
+                        binding.bool2.isChecked,
+                        binding.bool3.isChecked,
+                        binding.bool4.isChecked,
+                        binding.bool5.isChecked
+                    )
+                    cosas["condiciones"] = condiciones
+                    val rating: Float = binding.dificultad.getRating()
+                    val ratingDouble = rating.toDouble()
+                    cosas["dificultad"] = ratingDouble.toString()
+                    cosas["tiempoPrep"] = binding.horas.text.toString()+":"+binding.minutos.text.toString()
 
                     // Upload the selected image to Firebase Storage
                     var imagenID:String=UUID.randomUUID().toString()+".png"
@@ -140,7 +208,9 @@ class OptionsFragment : Fragment() {
                     }
                 }
 
-
+            } else {
+                Toast.makeText(context, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.imagenSeleccion.setOnClickListener {
