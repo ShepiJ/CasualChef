@@ -220,6 +220,16 @@ class MainActivity : AppCompatActivity(), OnItemClick {
     }
 
     private fun abrirDetalle(id:String) {
+        var guardarIdReceta =
+            this?.getSharedPreferences(
+                "idGuardadaReceta",
+                MODE_PRIVATE
+            )
+        guardarIdReceta?.edit()
+            ?.putString("ID", id)
+            ?.apply()
+
+
 
         val intent = Intent(this,DetalleActivity::class.java)
         intent.putExtra("ID",id)

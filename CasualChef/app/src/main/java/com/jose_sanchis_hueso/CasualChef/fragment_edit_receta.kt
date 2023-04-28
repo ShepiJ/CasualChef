@@ -9,7 +9,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
@@ -17,6 +16,10 @@ import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -26,16 +29,16 @@ import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.jose_sanchis_hueso.CasualChef.databinding.ActivityCrearBinding
-import com.jose_sanchis_hueso.CasualChef.databinding.ActivityEditarRecetaBinding
+import com.jose_sanchis_hueso.CasualChef.databinding.ActivityDatosUsuarioBinding
+import com.jose_sanchis_hueso.CasualChef.databinding.FragmentEditRecetaBinding
 import ponerImagenUsuario
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 
-class Crear : AppCompatActivity() {
-    private lateinit var binding: ActivityCrearBinding
+class fragment_edit_receta : Fragment() {
+    private lateinit var binding: FragmentEditRecetaBinding
     private var imageUri: Uri? = null
 
     companion object {
@@ -43,35 +46,41 @@ class Crear : AppCompatActivity() {
         const val MAX_IMAGE_SIZE = 1024 // 1 MB in kilobytes
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityCrearBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentEditRecetaBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         // pide acceso a archivos y tal, sin esto no podria mandar imagenes
         if (ContextCompat.checkSelfPermission(
-                this,
+                requireContext(),
                 Manifest.permission.READ_EXTERNAL_STORAGE
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
-                this,
+                requireActivity(),
                 arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                fragment_edit_receta.GALLERY_REQUEST_CODE
+                GALLERY_REQUEST_CODE
             )
         } else {
         }
 
+        ponerTextos()
 
-
-        binding.editDescripcion.setOnClickListener {
-            cambiarTexto(binding.descripcionReceta)
+/**
+        binding.editDescripcion.setOnClickListener{
+        cambiarTexto(binding.descripcionReceta)
         }
-        binding.editIngredientes.setOnClickListener {
+        binding.editIngredientes.setOnClickListener{
             cambiarTexto(binding.ingredientesReceta)
         }
-
+**/
         //Los watcher para no poner más horas de las pedidas
         val horasEditText: EditText = binding.horas
         val minutosEditText: EditText = binding.minutos
@@ -128,11 +137,14 @@ class Crear : AppCompatActivity() {
                 // Para evitar mandar más de una publicacion a la vez
                 binding.btnMandar.isEnabled = false
 
+
+
+
                 FirebaseAuth.getInstance().signInAnonymously()
                     .addOnSuccessListener { authResult ->
                         val user = authResult.user
                         val sharedPrefs =
-                            getSharedPreferences("login", Context.MODE_PRIVATE)
+                            requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
                         val username = sharedPrefs.getString("username", "")
                         val firestore = FirebaseFirestore.getInstance()
                         val cosas: MutableMap<String, Any> = HashMap()
@@ -180,21 +192,21 @@ class Crear : AppCompatActivity() {
                                     .add(cosas)
                                     .addOnSuccessListener {
                                         Toast.makeText(
-                                            this,
+                                            context,
                                             "Se ha publicado la receta",
                                             Toast.LENGTH_SHORT
                                         )
                                             .show()
                                         Handler().postDelayed({
                                             val intent =
-                                                Intent(this, MainActivity::class.java)
+                                                Intent(requireContext(), MainActivity::class.java)
                                             startActivity(intent)
                                         }, 2000)
                                     }
                                     .addOnFailureListener { e ->
                                         Log.e(ContentValues.TAG, "DBFallo", e)
                                         Toast.makeText(
-                                            this,
+                                            context,
                                             "Ha habido un error al publicar la receta",
                                             Toast.LENGTH_SHORT
                                         ).show()
@@ -203,7 +215,7 @@ class Crear : AppCompatActivity() {
                         }?.addOnFailureListener { e ->
                             Log.e(ContentValues.TAG, "UploadFallo", e)
                             Toast.makeText(
-                                this,
+                                context,
                                 "Ha habido un error al subir la imagen",
                                 Toast.LENGTH_SHORT
                             ).show()
@@ -211,14 +223,14 @@ class Crear : AppCompatActivity() {
                     }
 
             } else {
-                Toast.makeText(this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT)
+                Toast.makeText(context, "Por favor, completa todos los campos", Toast.LENGTH_SHORT)
                     .show()
             }
         }
 
         binding.imagenSeleccion.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, fragment_edit_receta.GALLERY_REQUEST_CODE)
+            startActivityForResult(intent, GALLERY_REQUEST_CODE)
         }
 
     }
@@ -228,7 +240,7 @@ class Crear : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
 
-        if (requestCode == fragment_edit_receta.GALLERY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == GALLERY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
             // Get the selected image URI
             imageUri = data.data
 
@@ -244,7 +256,7 @@ class Crear : AppCompatActivity() {
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
         BitmapFactory.decodeStream(
-            imageUri?.let { this?.contentResolver?.openInputStream(it) },
+            imageUri?.let { context?.contentResolver?.openInputStream(it) },
             null,
             options
         )
@@ -262,7 +274,7 @@ class Crear : AppCompatActivity() {
         options.inSampleSize = scaleFactor
 
         return BitmapFactory.decodeStream(
-            imageUri?.let { this?.contentResolver?.openInputStream(it) },
+            imageUri?.let { context?.contentResolver?.openInputStream(it) },
             null,
             options
         )!!
@@ -278,13 +290,101 @@ class Crear : AppCompatActivity() {
         val byteArray = outputStream.toByteArray()
 
         // Create a new file in the app's local storage directory
-        val resizedImageFile = File(this?.cacheDir, "resized_image.jpg")
+        val resizedImageFile = File(context?.cacheDir, "resized_image.jpg")
         val fos = FileOutputStream(resizedImageFile)
         fos.write(byteArray)
         fos.close()
 
         // Return the URI of the new file
         return Uri.fromFile(resizedImageFile)
+    }
+
+    private fun ponerTextos() {
+        val sharedPrefs =
+            requireContext().getSharedPreferences("idGuardadaReceta", Context.MODE_PRIVATE)
+        val id = sharedPrefs.getString("ID", "")
+
+        val firestore = FirebaseFirestore.getInstance()
+        firestore.collection("recetas")
+            .whereEqualTo("id", id)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+
+                if (!querySnapshot.isEmpty) {
+                    val userData = querySnapshot.documents[0].data
+
+                    with(binding) {
+                        //Hay que ponerlo así en los editText porque sino no deja porque no permite strings
+                        nombreReceta.apply {
+                            setText(userData?.get("nombre").toString())
+                            inputType = InputType.TYPE_CLASS_TEXT
+                            isFocusable = true
+                            isFocusableInTouchMode = true
+                        }
+
+                        val condiciones = userData?.get("condiciones") as? List<Boolean>
+                        bool1.isChecked = condiciones?.get(0) ?: false
+                        bool2.isChecked = condiciones?.get(1) ?: false
+                        bool3.isChecked = condiciones?.get(2) ?: false
+                        bool4.isChecked = condiciones?.get(3) ?: false
+                        bool5.isChecked = condiciones?.get(4) ?: false
+
+                        val tiempo = userData?.get("tiempoPrep").toString()
+                        val horas = tiempo.substring(0, 2)
+                        val minutos = tiempo.substring(3, 5)
+
+                        binding.horas.apply {
+                            setText(horas)
+                            inputType = InputType.TYPE_CLASS_TEXT
+                            isFocusable = true
+                            isFocusableInTouchMode = true
+                        }
+                        binding.minutos.apply {
+                            setText(minutos)
+                            inputType = InputType.TYPE_CLASS_TEXT
+                            isFocusable = true
+                            isFocusableInTouchMode = true
+                        }
+
+                        ingredientesReceta.apply {
+                            setText(userData?.get("ingredientes").toString())
+                            inputType = InputType.TYPE_CLASS_TEXT
+                            isFocusable = true
+                            isFocusableInTouchMode = true
+                        }
+                        tagsReceta.apply {
+                            setText(userData?.get("tags").toString())
+                            inputType = InputType.TYPE_CLASS_TEXT
+                            isFocusable = true
+                            isFocusableInTouchMode = true
+                        }
+                        descripcionReceta.apply {
+                            setText(userData?.get("descripcion").toString())
+                            inputType = InputType.TYPE_CLASS_TEXT
+                            isFocusable = true
+                            isFocusableInTouchMode = true
+                        }
+                        dificultad.rating = userData?.get("dificultad").toString().toFloat()
+
+                        val storageRef = FirebaseStorage.getInstance().reference.child(
+                            "images/" + userData?.get("imagen").toString()
+                        )
+                        storageRef.downloadUrl.addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                val imageUrl = task.result.toString()
+                                userData?.get("imagen").toString().ponerImagenUsuario(
+                                    requireContext(),
+                                    imageUrl,
+                                    imagenSeleccion
+                                )
+                            } else {
+                                imagenSeleccion.setImageResource(R.drawable.casualchef)
+                            }
+                        }
+
+                    }
+                }
+            }
     }
 
     fun cambiarTexto(nombreViejo: TextView) {
@@ -306,7 +406,6 @@ class Crear : AppCompatActivity() {
             .create()
 
         dialog.show()
-
-
     }
+
 }

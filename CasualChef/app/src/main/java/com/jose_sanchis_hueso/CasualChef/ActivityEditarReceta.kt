@@ -26,7 +26,7 @@ import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.jose_sanchis_hueso.CasualChef.databinding.ActivityCrearBinding
+import com.jose_sanchis_hueso.CasualChef.databinding.ActivityDatosUsuarioBinding
 import com.jose_sanchis_hueso.CasualChef.databinding.ActivityEditarRecetaBinding
 import ponerImagenUsuario
 import java.io.ByteArrayOutputStream
@@ -34,8 +34,8 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 
-class Crear : AppCompatActivity() {
-    private lateinit var binding: ActivityCrearBinding
+class ActivityEditarReceta : AppCompatActivity() {
+    private lateinit var binding: ActivityEditarRecetaBinding
     private var imageUri: Uri? = null
 
     companion object {
@@ -45,9 +45,8 @@ class Crear : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityCrearBinding.inflate(layoutInflater)
+        binding = ActivityEditarRecetaBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
         // pide acceso a archivos y tal, sin esto no podria mandar imagenes
         if (ContextCompat.checkSelfPermission(
@@ -63,6 +62,7 @@ class Crear : AppCompatActivity() {
         } else {
         }
 
+        ponerTextos()
 
 
         binding.editDescripcion.setOnClickListener {
@@ -121,22 +121,26 @@ class Crear : AppCompatActivity() {
                 binding.descripcionReceta.text.isNotEmpty() &&
                 binding.tagsReceta.text.isNotEmpty() &&
                 binding.horas.text.isNotEmpty() &&
-                binding.minutos.text.isNotEmpty() &&
-                imageUri != null
+                binding.minutos.text.isNotEmpty()
+            //imageUri != null
             ) {
 
                 // Para evitar mandar más de una publicacion a la vez
                 binding.btnMandar.isEnabled = false
 
+
+                val sharedPrefs = getSharedPreferences("idGuardadaReceta", Context.MODE_PRIVATE)
+                val idReceta = sharedPrefs.getString("ID", "")
+
                 FirebaseAuth.getInstance().signInAnonymously()
                     .addOnSuccessListener { authResult ->
                         val user = authResult.user
-                        val sharedPrefs =
-                            getSharedPreferences("login", Context.MODE_PRIVATE)
+                        val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)
                         val username = sharedPrefs.getString("username", "")
                         val firestore = FirebaseFirestore.getInstance()
+                        val recetasRef = firestore.collection("recetas")
                         val cosas: MutableMap<String, Any> = HashMap()
-                        cosas["id"] = UUID.randomUUID().toString()
+                        cosas["id"] = idReceta.toString() // Set the ID of the recipe to update
                         cosas["nombre"] = binding.nombreReceta.text.toString()
                         cosas["desarrollador"] = username.toString()
                         cosas["ingredientes"] = binding.ingredientesReceta.text.toString()
@@ -175,44 +179,54 @@ class Crear : AppCompatActivity() {
                             if (task.isSuccessful) {
                                 cosas["imagen"] = imagenID
 
-                                // Add the `cosas` map to the `recetas` collection in Firestore
                                 firestore.collection("recetas")
-                                    .add(cosas)
-                                    .addOnSuccessListener {
+                                    .whereEqualTo("id", idReceta.toString())
+                                    .get()
+                                    .addOnSuccessListener { documents ->
+                                        if (documents.size() > 0) {
+                                            val document = documents.documents[0]
+                                            // Update the `cosas` map in the document
+                                            document.reference.update(cosas)
+                                                .addOnSuccessListener {
+                                                    Toast.makeText(
+                                                        this,
+                                                        "Se ha actualizado la receta",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                    Handler().postDelayed({
+                                                        val intent =
+                                                            Intent(this, MainActivity::class.java)
+                                                        startActivity(intent)
+                                                    }, 2000)
+                                                }
+
+                                                .addOnFailureListener { e ->
+                                                    Log.e(ContentValues.TAG, "DBFallo", e)
+                                                    Toast.makeText(
+                                                        this,
+                                                        "Ha habido un error al actualizar la receta",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                }
+                                        }
+                                    }?.addOnFailureListener { e ->
+                                        Log.e(ContentValues.TAG, "UploadFallo", e)
                                         Toast.makeText(
                                             this,
-                                            "Se ha publicado la receta",
-                                            Toast.LENGTH_SHORT
-                                        )
-                                            .show()
-                                        Handler().postDelayed({
-                                            val intent =
-                                                Intent(this, MainActivity::class.java)
-                                            startActivity(intent)
-                                        }, 2000)
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Log.e(ContentValues.TAG, "DBFallo", e)
-                                        Toast.makeText(
-                                            this,
-                                            "Ha habido un error al publicar la receta",
+                                            "Ha habido un error al subir la imagen",
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     }
+                            } else {
+                                Toast.makeText(
+                                    this,
+                                    "Por favor, completa todos los campos",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
                             }
-                        }?.addOnFailureListener { e ->
-                            Log.e(ContentValues.TAG, "UploadFallo", e)
-                            Toast.makeText(
-                                this,
-                                "Ha habido un error al subir la imagen",
-                                Toast.LENGTH_SHORT
-                            ).show()
                         }
                     }
-
-            } else {
-                Toast.makeText(this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT)
-                    .show()
             }
         }
 
@@ -285,6 +299,84 @@ class Crear : AppCompatActivity() {
 
         // Return the URI of the new file
         return Uri.fromFile(resizedImageFile)
+    }
+
+    private fun ponerTextos() {
+        val sharedPrefs =
+            this.getSharedPreferences("idGuardadaReceta", Context.MODE_PRIVATE)
+        val id = sharedPrefs.getString("ID", "")
+
+        val firestore = FirebaseFirestore.getInstance()
+        firestore.collection("recetas")
+            .whereEqualTo("id", id)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+
+                if (!querySnapshot.isEmpty) {
+                    val userData = querySnapshot.documents[0].data
+
+                    with(binding) {
+                        //Hay que ponerlo así en los editText porque sino no deja porque no permite strings
+                        nombreReceta.apply {
+                            setText(userData?.get("nombre").toString())
+                            inputType = InputType.TYPE_CLASS_TEXT
+                            isFocusable = true
+                            isFocusableInTouchMode = true
+                        }
+
+                        val condiciones = userData?.get("condiciones") as? List<Boolean>
+                        bool1.isChecked = condiciones?.get(0) ?: false
+                        bool2.isChecked = condiciones?.get(1) ?: false
+                        bool3.isChecked = condiciones?.get(2) ?: false
+                        bool4.isChecked = condiciones?.get(3) ?: false
+                        bool5.isChecked = condiciones?.get(4) ?: false
+
+                        val tiempo = userData?.get("tiempoPrep").toString()
+                        val horas = tiempo.substring(0, 2)
+                        val minutos = tiempo.substring(3, 5)
+
+                        binding.horas.apply {
+                            setText(horas)
+                            inputType = InputType.TYPE_CLASS_TEXT
+                            isFocusable = true
+                            isFocusableInTouchMode = true
+                        }
+                        binding.minutos.apply {
+                            setText(minutos)
+                            inputType = InputType.TYPE_CLASS_TEXT
+                            isFocusable = true
+                            isFocusableInTouchMode = true
+                        }
+                        binding.ingredientesReceta.text = userData?.get("ingredientes").toString()
+                        binding.descripcionReceta.text = userData?.get("descripcion").toString()
+                        tagsReceta.apply {
+                            setText(userData?.get("tags").toString())
+                            inputType = InputType.TYPE_CLASS_TEXT
+                            isFocusable = true
+                            isFocusableInTouchMode = true
+
+                        }
+                        dificultad.rating = userData?.get("dificultad").toString().toFloat()
+
+                        val storageRef = FirebaseStorage.getInstance().reference.child(
+                            "images/" + userData?.get("imagen").toString()
+                        )
+                        storageRef.downloadUrl.addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                val imageUrl = task.result.toString()
+                                userData?.get("imagen").toString().ponerImagenUsuario(
+                                    this@ActivityEditarReceta,
+                                    imageUrl,
+                                    imagenSeleccion
+                                )
+                            } else {
+                                imagenSeleccion.setImageResource(R.drawable.casualchef)
+                            }
+                        }
+
+                    }
+                }
+            }
     }
 
     fun cambiarTexto(nombreViejo: TextView) {

@@ -1,10 +1,12 @@
 package com.jose_sanchis_hueso.CasualChef
 
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.view.isVisible
 import com.google.firebase.storage.FirebaseStorage
 import com.jose_sanchis_hueso.CasualChef.databinding.ActivityDetalleBinding
 import com.jose_sanchis_hueso.CasualChef.model.Articulo
@@ -19,6 +21,15 @@ class DetalleActivity : AppCompatActivity() {
             ActivityDetalleBinding.inflate(layoutInflater).also { binding = it }.root
         )
         cargarVideoJuego()
+
+        binding.buttonEditar.setOnClickListener {
+            val intent = Intent(this, ActivityEditarReceta::class.java)
+            startActivity(intent)
+        }
+
+        binding.buttonBorrar.setOnClickListener {
+
+        }
 
         binding.tvDeveloper.setOnClickListener{
 
@@ -86,6 +97,16 @@ class DetalleActivity : AppCompatActivity() {
         tvTag1.text = articulo.tags
         tvIngredients.text = articulo.ingredientes
         tvDescripcion.text = articulo.descripcion
+
+        val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)
+        val username = sharedPrefs.getString("username", "")
+
+        if (binding.tvDeveloper.text.toString().equals(username)){
+            binding.buttonEditar.isEnabled = true
+            binding.buttonEditar.isVisible = true
+            binding.buttonBorrar.isEnabled = true
+            binding.buttonBorrar.isVisible = true
+        }
     }
 }
 
