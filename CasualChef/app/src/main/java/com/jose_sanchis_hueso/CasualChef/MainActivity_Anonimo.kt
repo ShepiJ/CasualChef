@@ -1,7 +1,6 @@
 package com.jose_sanchis_hueso.CasualChef
 
 import OnItemClick
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -15,34 +14,20 @@ import androidx.navigation.ui.NavigationUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.GsonBuilder
-import com.jose_sanchis_hueso.CasualChef.databinding.ActivityMainBinding
+import com.jose_sanchis_hueso.CasualChef.databinding.ActivityMainAnonimoBinding
 import com.jose_sanchis_hueso.CasualChef.model.Articulo
 import java.io.OutputStream
 
-class MainActivity : AppCompatActivity(), OnItemClick {
+class MainActivity_Anonimo : AppCompatActivity(), OnItemClick {
 
-    lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainAnonimoBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
     private lateinit var navControllerDrawer: NavController
-    private lateinit var progressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Cargando...")
-        progressDialog.setCancelable(false)
 
-        progressDialog.show()
-
-        //Coge los datos de la base de datos de forma anonima
-        FirebaseAuth.getInstance().signInAnonymously()
-            .addOnSuccessListener { authResult ->
-                guardarColeccionJson(this, "recetas", "recetas.json"){
-                    progressDialog.dismiss()
-                }
-
-            }
 
         val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)
         val username = sharedPrefs.getString("username", "")
@@ -55,7 +40,7 @@ class MainActivity : AppCompatActivity(), OnItemClick {
 
         super.onCreate(savedInstanceState)
         setContentView(
-            ActivityMainBinding.inflate(layoutInflater).also { binding = it }.root
+            ActivityMainAnonimoBinding.inflate(layoutInflater).also { binding = it }.root
         )
         setSupportActionBar(binding.toolbar)
 
@@ -96,6 +81,12 @@ class MainActivity : AppCompatActivity(), OnItemClick {
 
 
 
+        //Coge los datos de la base de datos de forma anonima
+        FirebaseAuth.getInstance().signInAnonymously()
+            .addOnSuccessListener { authResult ->
+                guardarColeccionJson(this, "recetas", "recetas.json")
+            }
+
     }
 
     override fun onResume() {
@@ -113,7 +104,7 @@ class MainActivity : AppCompatActivity(), OnItemClick {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.options_menu, menu)
+        menuInflater.inflate(R.menu.options_menu_anonimo, menu)
         return true
     }
 
@@ -135,15 +126,15 @@ class MainActivity : AppCompatActivity(), OnItemClick {
 
         when (item.itemId) {
             R.id.optionsFragment1 -> {
-                val intent = Intent(this, Crear::class.java)
+
+                val intent = Intent(this, MainActivity_Anonimo::class.java)
                 startActivity(intent)
+
+                //val intent = Intent(this, Crear::class.java)
+                //startActivity(intent)
             }
             R.id.filtros -> {
                 val intent = Intent(this, FiltroActivity::class.java)
-                startActivity(intent)
-            }
-            R.id.reset -> {
-                val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             }
         }
@@ -161,12 +152,7 @@ class MainActivity : AppCompatActivity(), OnItemClick {
 
     }
 
-    fun guardarColeccionJson(
-        context: Context,
-        coleccion: String,
-        nombreFichero: String,
-        callback: () -> Unit
-    ) {
+    fun guardarColeccionJson(context: Context, coleccion: String, nombreFichero: String) {
         val db = FirebaseFirestore.getInstance()
 
         db.collection(coleccion).get().addOnSuccessListener { querySnapshot ->
@@ -183,9 +169,6 @@ class MainActivity : AppCompatActivity(), OnItemClick {
                 context.openFileOutput(nombreFichero, Context.MODE_PRIVATE)
             outputStream.write(json.toByteArray())
             outputStream.close()
-
-            // Call the callback when the data is downloaded
-            callback()
         }
     }
 

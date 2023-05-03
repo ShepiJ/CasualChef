@@ -1,11 +1,15 @@
 package com.jose_sanchis_hueso.CasualChef
 
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.GsonBuilder
 import com.jose_sanchis_hueso.CasualChef.databinding.ActivityRegistracionBinding
+import java.io.OutputStream
 
 class Registracion : AppCompatActivity() {
 
@@ -77,5 +81,26 @@ class Registracion : AppCompatActivity() {
                     }
                 }
         }
+
+    fun guardarColeccionJson(context: Context, coleccion: String, nombreFichero: String) {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection(coleccion).get().addOnSuccessListener { querySnapshot ->
+            val articleList = mutableListOf<Map<String, Any>>()
+
+            for (document in querySnapshot) {
+                articleList.add(document.data)
+            }
+
+            val gson = GsonBuilder().setPrettyPrinting().create()
+            val json = gson.toJson(articleList)
+
+            val outputStream: OutputStream =
+                context.openFileOutput(nombreFichero, Context.MODE_PRIVATE)
+            outputStream.write(json.toByteArray())
+            outputStream.close()
+        }
+    }
+
     }
 

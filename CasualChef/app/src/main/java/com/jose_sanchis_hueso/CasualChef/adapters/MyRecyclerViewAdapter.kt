@@ -6,11 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageException
 import com.jose_sanchis_hueso.CasualChef.R
 import com.jose_sanchis_hueso.CasualChef.databinding.FragmentCartaArticuloBinding
 import com.jose_sanchis_hueso.CasualChef.model.Articulo
@@ -37,12 +35,6 @@ class MyRecyclerViewAdapter(
         Log.d("ArticulosFragmentLog", "idEKISDE = ${articulo.id}")
         holder.tvNombre.text = articulo.nombre
         holder.tvDesarrollador.text = articulo.desarrollador
-        //holder.ratingBar.numStars = 10
-        //holder.ratingBar.rating = articulo.puntuacion
-
-
-        //val imageUrl = "gs://casualchef.appspot.com/images/${articulo.imagen}"
-        //articulo.imagen.ponerImagen(holder.ivArticulo.context, imageUrl, holder.ivArticulo)
 
         val storageRef = FirebaseStorage.getInstance().reference.child("images/${articulo.imagen}")
         storageRef.downloadUrl.addOnCompleteListener { task ->
@@ -60,13 +52,13 @@ class MyRecyclerViewAdapter(
         holder.itemView.setOnClickListener(holder)
     }
 
+
     override fun getItemCount(): Int = articuloList.size
 
     inner class ViewHolder(binding: FragmentCartaArticuloBinding) : RecyclerView.ViewHolder(binding.root),View.OnClickListener {
 
         val tvNombre: TextView = binding.tvTituloVideojuegos
         val tvDesarrollador: TextView = binding.tvDeveloper
-        //val ratingBar: RatingBar = binding.estrellas
         val ivArticulo: ImageView = binding.ivVideojuego
 
         override fun toString(): String {

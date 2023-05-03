@@ -1,13 +1,11 @@
-package com.jose_sanchis_hueso.CasualChef
+package com.jose_sanchis_hueso.CasualChef.tabbed
 
 import android.content.Context
 import android.os.Bundle
-import android.provider.Settings.Global.getString
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.jose_sanchis_hueso.CasualChef.databinding.FragmentTabbedPrincipalBinding

@@ -2,13 +2,13 @@ package com.jose_sanchis_hueso.CasualChef
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.jose_sanchis_hueso.CasualChef.databinding.FragmentFiltrosBinding
 
-class filtros : Fragment() {
+class Filtros : Fragment() {
     private lateinit var binding: FragmentFiltrosBinding
 
     override fun onCreateView(

@@ -1,14 +1,10 @@
 package com.jose_sanchis_hueso.CasualChef
 
-import android.app.Activity
-import android.app.Activity.RESULT_OK
-import android.app.Application
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
-import android.graphics.*
+import android.graphics.Bitmap
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -16,34 +12,19 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.google.gson.GsonBuilder
 import com.jose_sanchis_hueso.CasualChef.databinding.ActivityDatosUsuarioBinding
-import com.jose_sanchis_hueso.CasualChef.databinding.ActivityRegistracionBinding
-import ponerImagen
 import ponerImagenUsuario
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
-import java.io.OutputStream
-import java.lang.StrictMath.min
-import java.util.*
 
 class ActivityDatos_Usuario : AppCompatActivity() {
 
     private lateinit var binding: ActivityDatosUsuarioBinding
-    private lateinit var imagenCosa: ImageView
-
-    companion object {
-        private const val PICK_IMAGE_REQUEST_CODE = 1
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -121,7 +102,7 @@ class ActivityDatos_Usuario : AppCompatActivity() {
         val context = nombreViejo.context
         val editText = EditText(context)
 
-        // Create an AlertDialog with an EditText to allow the user to enter a new name
+        // Crea un Dialog para poner lo que quieras
         val dialog = AlertDialog.Builder(context)
             .setTitle("Cambiar nombre")
             .setMessage("Ingrese un nuevo nombre:")
@@ -154,14 +135,11 @@ class ActivityDatos_Usuario : AppCompatActivity() {
         val username = sharedPrefs.getString("username", "")
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.data != null) {
-            // Get the Uri of the selected image
             val imageUri = data.data
 
-            // Load the selected image into an ImageView or do whatever you want with it
             val imageView: ImageView = findViewById(R.id.imagenUsu)
             imageView.setImageURI(imageUri)
 
-            // Resize the image and store it in the cache directory
             val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
             val resizedBitmap = Bitmap.createScaledBitmap(bitmap, IMAGE_WIDTH, IMAGE_HEIGHT, false)
 
@@ -175,7 +153,6 @@ class ActivityDatos_Usuario : AppCompatActivity() {
                 outputStream.flush()
                 outputStream.close()
 
-                // Load the resized image from the cache directory into the ImageView
                 val resizedImageUri = Uri.fromFile(file)
                 imageView.setImageURI(resizedImageUri)
             } catch (e: Exception) {

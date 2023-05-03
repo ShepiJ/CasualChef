@@ -9,7 +9,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
@@ -21,12 +20,13 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.jose_sanchis_hueso.CasualChef.databinding.ActivityDatosUsuarioBinding
 import com.jose_sanchis_hueso.CasualChef.databinding.ActivityEditarRecetaBinding
 import ponerImagenUsuario
 import java.io.ByteArrayOutputStream
@@ -57,12 +57,13 @@ class ActivityEditarReceta : AppCompatActivity() {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                fragment_edit_receta.GALLERY_REQUEST_CODE
+                GALLERY_REQUEST_CODE
             )
         } else {
         }
 
         ponerTextos()
+
 
 
         binding.editDescripcion.setOnClickListener {
@@ -121,8 +122,8 @@ class ActivityEditarReceta : AppCompatActivity() {
                 binding.descripcionReceta.text.isNotEmpty() &&
                 binding.tagsReceta.text.isNotEmpty() &&
                 binding.horas.text.isNotEmpty() &&
-                binding.minutos.text.isNotEmpty()
-            //imageUri != null
+                binding.minutos.text.isNotEmpty() &&
+                imageUri != null
             ) {
 
                 // Para evitar mandar más de una publicacion a la vez
@@ -232,7 +233,7 @@ class ActivityEditarReceta : AppCompatActivity() {
 
         binding.imagenSeleccion.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, fragment_edit_receta.GALLERY_REQUEST_CODE)
+            startActivityForResult(intent, GALLERY_REQUEST_CODE)
         }
 
     }
@@ -242,7 +243,7 @@ class ActivityEditarReceta : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
 
-        if (requestCode == fragment_edit_receta.GALLERY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == GALLERY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
             // Get the selected image URI
             imageUri = data.data
 
@@ -332,6 +333,10 @@ class ActivityEditarReceta : AppCompatActivity() {
                         bool5.isChecked = condiciones?.get(4) ?: false
 
                         val tiempo = userData?.get("tiempoPrep").toString()
+
+                        val rutaImagen = File(cacheDir, userData?.get("imagen").toString()+".jpg")
+                        imageUri = rutaImagen.toUri()
+
                         val horas = tiempo.substring(0, 2)
                         val minutos = tiempo.substring(3, 5)
 

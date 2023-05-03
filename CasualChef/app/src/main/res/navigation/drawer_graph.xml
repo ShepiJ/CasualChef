@@ -5,23 +5,23 @@
     android:id="@+id/drawer_graph"
     app:startDestination="@id/vacio">
     <fragment
-        android:id="@+id/drawer1fragment2"
-        android:name="com.jose_sanchis_hueso.CasualChef.drawer1fragment"
-        android:label="fragment_drawer1fragment"
-        tools:layout="@layout/fragment_drawer1fragment" />
+        android:id="@+id/Cargando_"
+        android:name="com.jose_sanchis_hueso.CasualChef.drawers.Cargando_"
+        android:label="Cargando..."
+        tools:layout="@layout/cargando_" />
     <fragment
         android:id="@+id/vacio"
-        android:name="com.jose_sanchis_hueso.CasualChef.vacio"
-        android:label="fragment_vacio"
+        android:name="com.jose_sanchis_hueso.CasualChef.drawers.Vacio"
+        android:label="Cargando..."
         tools:layout="@layout/fragment_vacio" />
     <fragment
-        android:id="@+id/drawer2fragment2"
-        android:name="com.jose_sanchis_hueso.CasualChef.drawer2fragment2"
-        android:label="fragment_drawer2fragment2"
-        tools:layout="@layout/fragment_drawer2fragment2" />
+        android:id="@+id/Cargando__"
+        android:name="com.jose_sanchis_hueso.CasualChef.drawers.Cargando__"
+        android:label="Cargando..."
+        tools:layout="@layout/cargando__" />
     <fragment
-        android:id="@+id/drawer3fragment2"
-        android:name="com.jose_sanchis_hueso.CasualChef.drawer3fragment2"
-        android:label="fragment_drawer3fragment2"
-        tools:layout="@layout/fragment_drawer3fragment2" />
+        android:id="@+id/Cargando___"
+        android:name="com.jose_sanchis_hueso.CasualChef.drawers.Cargando___"
+        android:label="Cargando..."
+        tools:layout="@layout/cargando___" />
 </navigation>

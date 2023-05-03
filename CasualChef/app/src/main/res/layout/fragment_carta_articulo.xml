@@ -6,7 +6,7 @@
     app:cardElevation="5dp"
     android:layout_margin="9dp"
     app:cardCornerRadius="8dp"
-    android:backgroundTint="@color/background_carta"
+    android:backgroundTint="@color/recetafondo"
     android:layout_height="150dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,7 +22,7 @@
             android:layout_marginTop="14dp"
             android:gravity="center"
             android:text="developer del juego"
-            android:textColor="@color/white"
+            android:textColor="@color/letra"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/tvTituloVideojuegos"
@@ -41,7 +41,7 @@
             android:layout_marginEnd="6dp"
             android:text="Nombre del juego"
             android:gravity="center"
-            android:textColor="@color/white"
+            android:textColor="@color/letra"
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/tvDeveloper"

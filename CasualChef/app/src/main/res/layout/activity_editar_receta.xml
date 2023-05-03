@@ -8,7 +8,7 @@
     android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:background="@color/background_principal"
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:text="Nombre de la receta"
             android:layout_gravity="center"
-            android:textColor="@color/white"
+            android:textColor="@color/etiqueta"
             android:textSize="15sp"
             android:gravity="center"
             android:paddingTop="10dp"
@@ -38,7 +38,7 @@
             android:inputType="textPersonName"
             android:minHeight="48dp"
             android:text=""
-            android:textColor="@color/white"
+            android:textColor="@color/letra"
             tools:ignore="SpeakableTextPresentCheck"
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="376dp" />
@@ -53,7 +53,7 @@
             android:text="ImagenReceta"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:textColor="@color/white"
+            android:textColor="@color/etiqueta"
             android:textSize="15sp"
             tools:layout_editor_absoluteX="126dp"
             tools:layout_editor_absoluteY="434dp" />
@@ -86,13 +86,13 @@
             android:layout_marginLeft="10dp"
             android:gravity="left"
             android:text="Ingredientes de la receta"
-            android:textColor="@color/white"
+            android:textColor="@color/etiqueta"
             android:textSize="15sp"
             tools:layout_editor_absoluteX="138dp"
             tools:layout_editor_absoluteY="166dp" />
 
         <ImageButton
-            android:id="@+id/editDescripcion"
+            android:id="@+id/editIngredientes"
             android:layout_width="45dp"
             android:layout_height="37dp"
             android:backgroundTint="@color/background_principal"
@@ -104,6 +104,7 @@
             app:srcCompat="@drawable/editar"
             tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
+
     </LinearLayout>
         <TextView
             android:id="@+id/ingredientesReceta"
@@ -112,8 +113,8 @@
             android:gravity="left"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:text="@string/loremIpsum"
-            android:textColor="@color/white"
+            android:text=""
+            android:textColor="@color/letra"
             tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck"
             tools:layout_editor_absoluteX="-1dp"
             tools:layout_editor_absoluteY="468dp" />
@@ -126,7 +127,7 @@
             android:text="Tags de la receta"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:textColor="@color/white"
+            android:textColor="@color/etiqueta"
             android:textSize="15sp"
             tools:layout_editor_absoluteX="138dp"
             tools:layout_editor_absoluteY="46dp" />
@@ -141,7 +142,7 @@
             android:inputType="textPersonName"
             android:minHeight="48dp"
             android:text=""
-            android:textColor="@color/white"
+            android:textColor="@color/letra"
             tools:ignore="SpeakableTextPresentCheck"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="102dp" />
@@ -156,19 +157,19 @@
                 android:id="@+id/textView4"
                 android:layout_width="184dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:layout_weight="1"
+                android:gravity="left"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:layout_marginLeft="10dp"
-                android:gravity="left"
                 android:text="Descripcion de la receta"
-                android:textColor="@color/white"
+                android:textColor="@color/etiqueta"
                 android:textSize="15sp"
                 tools:layout_editor_absoluteX="138dp"
                 tools:layout_editor_absoluteY="166dp" />
 
             <ImageButton
-                android:id="@+id/editIngredientes"
+                android:id="@+id/editDescripcion"
                 android:layout_width="45dp"
                 android:layout_height="37dp"
                 android:backgroundTint="@color/background_principal"
@@ -189,8 +190,8 @@
             android:gravity="left"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:text="@string/loremIpsum"
-            android:textColor="@color/white"
+            android:text=""
+            android:textColor="@color/letra"
             tools:ignore="SpeakableTextPresentCheck"
             tools:layout_editor_absoluteY="582dp" />
 
@@ -199,7 +200,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Condiciones"
-            android:textColor="@color/white"
+            android:textColor="@color/etiqueta"
             android:textSize="15sp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
@@ -291,6 +292,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:maxLength="2"
+                android:textColor="@color/letra"
                 android:inputType="number"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
@@ -314,6 +316,7 @@
                 android:layout_marginEnd="150dp"
                 android:layout_weight="1"
                 android:maxLength="2"
+                android:textColor="@color/letra"
                 android:ems="10"
                 android:inputType="number"
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
@@ -326,7 +329,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Dificultad de la receta"
-            android:textColor="@color/white"
+            android:textColor="@color/etiqueta"
             android:textSize="15sp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
@@ -351,6 +354,8 @@
             <Button
                 android:id="@+id/btnMandar"
                 android:layout_width="0dp"
+                android:background="@color/boton"
+                android:backgroundTint="@color/boton"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Editar"/>

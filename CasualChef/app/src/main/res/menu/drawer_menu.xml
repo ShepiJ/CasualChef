@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/drawer3fragment2"
-        android:icon="@android:drawable/star_big_off"
+        android:id="@+id/Cargando___"
+        android:icon="@android:drawable/ic_menu_view"
         android:title="Información de usuario" />
     <item
-        android:id="@+id/drawer2fragment2"
-        android:icon="@android:drawable/star_big_off"
+        android:id="@+id/Cargando__"
+        android:icon="@android:drawable/ic_menu_manage"
         android:title="Preferencias de Interfaz" />
     <item
-        android:id="@+id/drawer1fragment2"
-        android:icon="@android:drawable/star_big_off"
+        android:id="@+id/Cargando_"
+        android:icon="@android:drawable/ic_menu_set_as"
         android:title="Cerrar Sesión" />
 </menu>

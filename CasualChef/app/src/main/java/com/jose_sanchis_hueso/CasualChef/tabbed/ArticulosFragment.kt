@@ -1,9 +1,8 @@
-package com.jose_sanchis_hueso.CasualChef
+package com.jose_sanchis_hueso.CasualChef.tabbed
 
 import OnItemClick
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +10,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.jose_sanchis_hueso.CasualChef.R
 import com.jose_sanchis_hueso.CasualChef.adapters.MyRecyclerViewAdapter
 import com.jose_sanchis_hueso.CasualChef.model.Articulo
 

@@ -1,15 +1,17 @@
 package com.jose_sanchis_hueso.CasualChef
 
 import android.R
-import android.content.Intent
+import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.jose_sanchis_hueso.CasualChef.databinding.ActivityPreferenciasInterfazBinding
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
@@ -23,32 +25,38 @@ class ActivityPreferencias_Interfaz : AppCompatActivity() {
         binding = ActivityPreferenciasInterfazBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        cargarColoresXML()
 
-        ensenarColor(binding.colorFondo, binding.buttonColorFondo)
-        ensenarColor(binding.colorLetra, binding.buttonColorLetra)
-        ensenarColor(binding.colorBotones, binding.buttonColorBotones)
-        ensenarColor(binding.colorAppBar, binding.buttonColorAppBar)
-
-
-        //Para el spinner
-        val spinner: Spinner = binding.spinnerDefault
-        val items = listOf(" ", "Modo Claro", "Modo Oscuro")
-        val adapter = ArrayAdapter(this, R.layout.simple_spinner_item, items)
-        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
-
-        binding.editColorFondo.setOnClickListener {
-            ponerColor(binding.colorFondo, binding.buttonColorFondo)
+        binding.info.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage("Estas opciones se aplicarán solo a las recetas.")
+                .setCancelable(false)
+                .setPositiveButton("OK") { dialog, id ->
+                }
+            val alert = builder.create()
+            alert.show()
         }
+
+        binding.guardar.setOnClickListener {
+            hacerUpdate()
+        }
+        binding.restablecer.setOnClickListener {
+            restablecer()
+        }
+
         binding.editColorLetra.setOnClickListener {
             ponerColor(binding.colorLetra, binding.buttonColorLetra)
         }
         binding.editColorBotones.setOnClickListener {
             ponerColor(binding.colorBotones, binding.buttonColorBotones)
         }
-        binding.editColorAppBar.setOnClickListener {
-            ponerColor(binding.colorAppBar, binding.buttonColorAppBar)
+        binding.editColorEtiqueta.setOnClickListener {
+            ponerColor(binding.colorEtiqueta, binding.buttonColorEtiqueta)
         }
+        binding.editColorFondoReceta.setOnClickListener {
+            ponerColor(binding.fondocolorReceta, binding.buttonColorFondoReceta)
+        }
+
 
     }
 
@@ -85,4 +93,116 @@ class ActivityPreferencias_Interfaz : AppCompatActivity() {
     }
 
 
+    private fun cargarColoresXML() {
+
+        val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)
+        val username = sharedPrefs.getString("username", "")
+
+        val firestore = FirebaseFirestore.getInstance()
+        firestore.collection("preferencias_interfaz")
+            .whereEqualTo("usuario", username)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+
+                if (!querySnapshot.isEmpty) {
+                    val userData = querySnapshot.documents[0].data
+
+                    with(binding) {
+                        binding.colorLetra.text = userData?.get("colorLetra").toString()
+                        binding.colorEtiqueta.text = userData?.get("colorEtiqueta").toString()
+                        binding.colorBotones.text = userData?.get("colorBotones").toString()
+                        binding.fondocolorReceta.text = userData?.get("fondoColorReceta").toString()
+
+
+                        ensenarColor(binding.colorLetra, binding.buttonColorLetra)
+                        ensenarColor(binding.colorBotones, binding.buttonColorBotones)
+                        ensenarColor(binding.colorEtiqueta, binding.buttonColorEtiqueta)
+                        ensenarColor(binding.fondocolorReceta, binding.buttonColorFondoReceta)
+                    }
+
+                }
+
+            }
+
+
+    }
+
+    fun hacerUpdate() {
+        FirebaseAuth.getInstance().signInAnonymously()
+            .addOnSuccessListener { authResult ->
+
+                val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)
+                val username = sharedPrefs.getString("username", "")
+
+                val firestore = FirebaseFirestore.getInstance()
+
+                val datos_usuario_Nuevo: MutableMap<String, Any> = HashMap()
+
+                datos_usuario_Nuevo["colorLetra"] = binding.colorLetra.text.toString()
+                datos_usuario_Nuevo["colorEtiqueta"] = binding.colorEtiqueta.text.toString()
+                datos_usuario_Nuevo["colorBotones"] = binding.colorBotones.text.toString()
+                datos_usuario_Nuevo["fondoColorReceta"] = binding.fondocolorReceta.text.toString()
+                datos_usuario_Nuevo["usuario"] = username.toString()
+
+                firestore.collection("preferencias_interfaz")
+                    .whereEqualTo("usuario", username.toString())
+                    .get()
+                    .addOnSuccessListener { querySnapshot ->
+                        if (!querySnapshot.isEmpty) {
+                            val documentSnapshot = querySnapshot.documents[0]
+                            documentSnapshot.reference.update(datos_usuario_Nuevo)
+                                .addOnSuccessListener {
+                                    Toast.makeText(
+                                        this,
+                                        "Se han actualizado los colores",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                                .addOnFailureListener { e ->
+                                    Toast.makeText(
+                                        this,
+                                        "Ha habido un problema actualizando los colores",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                        }
+                    }
+            }
+    }
+
+    fun restablecer() {
+
+        val nightModeFlags =
+            this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        when (nightModeFlags) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                    binding.colorLetra.text = "#FFFFFF"
+                    binding.colorEtiqueta.text = "#4970E3"
+                    binding.colorBotones.text = "#A6A8A8"
+                    binding.fondocolorReceta.text = "#151515"
+            }
+            Configuration.UI_MODE_NIGHT_NO -> {
+                binding.colorLetra.text = "#000000"
+                binding.colorEtiqueta.text = "#0025FA"
+                binding.colorBotones.text = "#787A7A"
+                binding.fondocolorReceta.text = "#8799AC"
+            }
+            Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                binding.colorLetra.text = "#000000"
+                binding.colorEtiqueta.text = "#0025FA"
+                binding.colorBotones.text = "#787A7A"
+                binding.fondocolorReceta.text = "#8799AC"
+            }
+        }
+
+        ensenarColor(binding.colorLetra, binding.buttonColorLetra)
+        ensenarColor(binding.colorBotones, binding.buttonColorBotones)
+        ensenarColor(binding.colorEtiqueta, binding.buttonColorEtiqueta)
+        ensenarColor(binding.fondocolorReceta, binding.buttonColorFondoReceta)
+
+
+    }
+
 }
+
+

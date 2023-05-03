@@ -7,6 +7,6 @@
 
     <fragment
         android:id="@+id/tabbedPrincipalFragment"
-        android:name="com.jose_sanchis_hueso.CasualChef.TabbedPrincipalFragment"
+        android:name="com.jose_sanchis_hueso.CasualChef.tabbed.TabbedPrincipalFragment"
         android:label="TabbedPrincipalFragment" />
 </navigation>

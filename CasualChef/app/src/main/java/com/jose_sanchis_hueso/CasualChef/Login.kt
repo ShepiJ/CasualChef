@@ -10,7 +10,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.GsonBuilder
 import com.jose_sanchis_hueso.CasualChef.databinding.ActivityLoginBinding
 import java.io.OutputStream
-import kotlin.collections.HashMap
 
 class Login : AppCompatActivity() {
 
@@ -19,6 +18,7 @@ class Login : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         val sharedPref = getSharedPreferences("login", Context.MODE_PRIVATE)
         val isChecked = sharedPref.getBoolean("checkbox_checked", false)
@@ -36,26 +36,32 @@ class Login : AppCompatActivity() {
         //Coge los datos de la base de datos de forma anonima
         FirebaseAuth.getInstance().signInAnonymously()
             .addOnSuccessListener { authResult ->
-                guardarColeccionJson(this,"recetas","recetas.json")
+                guardarColeccionJson(this, "recetas", "recetas.json")
             }
 
-//El usuario no puede poner un nombre con espacios.
+        //El usuario no puede poner un nombre con espacios.
         binding.pasarMain.setOnClickListener {
-            val email = binding.cogerUsuario.text.toString()+"@gmail.com"
+            val email = binding.cogerUsuario.text.toString() + "@gmail.com"
             val password = binding.cogerContraseA.text.toString()
 
             if (password.isBlank()) {
-                Toast.makeText(this, "El campo Contraseña no puede estar vacio", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "El campo Contraseña no puede estar vacio", Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
 
             if (email.isBlank()) {
-                Toast.makeText(this, "El campo Usuario no puede estar vacio", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "El campo Usuario no puede estar vacio", Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
 
             if (email.contains(" ")) {
-                Toast.makeText(this, "El correo electrónico no puede contener espacios", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "El correo electrónico no puede contener espacios",
+                    Toast.LENGTH_SHORT
+                ).show()
                 return@setOnClickListener
             }
 
@@ -100,14 +106,13 @@ class Login : AppCompatActivity() {
                                 val username = sharedPrefs.getString("username", "")
                                 val firestore = FirebaseFirestore.getInstance()
 
-                                // Check if a document already exists for the user
                                 firestore.collection("datos_usuario")
                                     .whereEqualTo("usuario", username.toString())
                                     .get()
                                     .addOnSuccessListener { querySnapshot ->
                                         if (querySnapshot.isEmpty) {
-                                            // If no documents exist, add a new one
-                                            val datos_usuario_Nuevo: MutableMap<String, Any> = HashMap()
+                                            val datos_usuario_Nuevo: MutableMap<String, Any> =
+                                                HashMap()
                                             datos_usuario_Nuevo["usuario"] = username.toString()
                                             datos_usuario_Nuevo["nombre"] = "default"
                                             datos_usuario_Nuevo["apellido"] = "default"
@@ -116,30 +121,63 @@ class Login : AppCompatActivity() {
                                             datos_usuario_Nuevo["imagen"] = "default"
                                             datos_usuario_Nuevo["descripcion"] = "default"
 
-                                            firestore.collection("datos_usuario").add(datos_usuario_Nuevo)
+                                            firestore.collection("datos_usuario")
+                                                .add(datos_usuario_Nuevo)
                                         }
                                     }
                             }
 
+                        //Generando los datos de interfaz del usuario
+
                         FirebaseAuth.getInstance().signInAnonymously()
                             .addOnSuccessListener { authResult ->
-                                guardarColeccionJson(this,"datos_usuario","usuarios.json")
+                                val user = authResult.user
+                                val sharedPrefs = this.getSharedPreferences(
+                                    "login",
+                                    Context.MODE_PRIVATE
+                                )
+                                val username = sharedPrefs.getString("username", "")
+                                val firestore = FirebaseFirestore.getInstance()
+
+                                firestore.collection("preferencias_interfaz")
+                                    .whereEqualTo("usuario", username.toString())
+                                    .get()
+                                    .addOnSuccessListener { querySnapshot ->
+                                        if (querySnapshot.isEmpty) {
+                                            val datos_interfaz_usuario: MutableMap<String, Any> =
+                                                HashMap()
+                                            datos_interfaz_usuario["usuario"] = username.toString()
+                                            datos_interfaz_usuario["colorLetra"] = "#000000"
+                                            datos_interfaz_usuario["colorEtiqueta"] = "#0025FA"
+                                            datos_interfaz_usuario["colorBotones"] = "#787A7A"
+                                            datos_interfaz_usuario["fondoColorReceta"] = "#5A5B5C"
+
+                                            firestore.collection("preferencias_interfaz")
+                                                .add(datos_interfaz_usuario)
+                                        }
+                                    }
+                            }
+
+
+                        FirebaseAuth.getInstance().signInAnonymously()
+                            .addOnSuccessListener { authResult ->
+                                guardarColeccionJson(this, "datos_usuario", "usuarios.json")
                             }
 
 
                         //Ir al main
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
-                                } else {
-                                    //
-                                    Toast.makeText(
-                                        this,
-                                        "La Contraseña/Usuario no se pueden encontrar en la base de datos",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            }
+                    } else {
+                        //
+                        Toast.makeText(
+                            this,
+                            "La Contraseña/Usuario no se pueden encontrar en la base de datos",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
+                }
+        }
 
         binding.button2.setOnClickListener {
             val intent = Intent(this, Registracion::class.java)
@@ -159,34 +197,35 @@ class Login : AppCompatActivity() {
                 ?.putBoolean("checkbox_checked", binding.checkBox.isChecked)
                 ?.apply()
 
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, MainActivity_Anonimo::class.java)
             startActivity(intent)
         }
-                }
+
+
+    }
+
+
+    fun guardarColeccionJson(context: Context, coleccion: String, nombreFichero: String) {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection(coleccion).get().addOnSuccessListener { querySnapshot ->
+            val articleList = mutableListOf<Map<String, Any>>()
+
+            for (document in querySnapshot) {
+                articleList.add(document.data)
+            }
+
+            val gson = GsonBuilder().setPrettyPrinting().create()
+            val json = gson.toJson(articleList)
+
+            val outputStream: OutputStream =
+                context.openFileOutput(nombreFichero, Context.MODE_PRIVATE)
+            outputStream.write(json.toByteArray())
+            outputStream.close()
         }
-
-
-
-
-fun guardarColeccionJson(context: Context,coleccion: String,nombreFichero: String) {
-    val db = FirebaseFirestore.getInstance()
-
-    db.collection(coleccion).get().addOnSuccessListener { querySnapshot ->
-        val articleList = mutableListOf<Map<String, Any>>()
-
-        for (document in querySnapshot) {
-            articleList.add(document.data)
-        }
-
-        val gson = GsonBuilder().setPrettyPrinting().create()
-        val json = gson.toJson(articleList)
-
-        val outputStream: OutputStream =
-            context.openFileOutput(nombreFichero, Context.MODE_PRIVATE)
-        outputStream.write(json.toByteArray())
-        outputStream.close()
     }
 }
+
 
 /**
 val screenSplash = installSplashScreen()

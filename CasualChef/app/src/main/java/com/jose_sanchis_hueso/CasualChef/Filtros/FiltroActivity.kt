@@ -1,15 +1,14 @@
 package com.jose_sanchis_hueso.CasualChef
 
-import android.R
 import OnItemClick
+import android.R
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import androidx.navigation.NavController
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import com.jose_sanchis_hueso.CasualChef.databinding.ActivityFiltroBinding
 import com.jose_sanchis_hueso.CasualChef.model.Articulo
 
@@ -29,8 +28,6 @@ class FiltroActivity : AppCompatActivity() , OnItemClick {
         val adapter = ArrayAdapter(this, R.layout.simple_spinner_item, items)
         adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
-
-
 
         binding.buttonFiltrar.setOnClickListener {
 
@@ -57,8 +54,17 @@ class FiltroActivity : AppCompatActivity() , OnItemClick {
     }
 
     override fun onBackPressed() {
-        val intent = Intent(this,MainActivity::class.java)
-        startActivity(intent)
+        val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)
+        val username = sharedPrefs.getString("username", "")
+
+        if (!username.equals("Anónimo")) {
+            val intent = Intent(this,MainActivity::class.java)
+            startActivity(intent)
+        }else{
+            val intent = Intent(this,MainActivity_Anonimo::class.java)
+            startActivity(intent)
+        }
+
     }
 
     private fun abrirDetalle(id:String) {

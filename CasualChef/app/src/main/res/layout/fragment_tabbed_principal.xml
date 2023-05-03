@@ -8,11 +8,10 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
-        app:tabTextColor="@color/white"
+        app:tabTextColor="@color/appbarletra"
         android:layout_width="match_parent"
         app:tabSelectedTextColor="#FFEB3B"
-        android:background="#0F0091"
-        android:backgroundTint="#0F0091"
+        android:background="@color/appbar"
         android:layout_height="wrap_content"/>
 
     <androidx.viewpager2.widget.ViewPager2

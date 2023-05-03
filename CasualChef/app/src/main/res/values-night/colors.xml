@@ -7,17 +7,16 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="gray">#BFBEBE</color>
     <color name="background_carta">#0F0091</color>
     <color name="text_color_tags">#FF9800</color>
 
 
-    <color name="background_principal">#8799AC</color>
-    <color name="letra">#000000</color>
-    <color name="etiqueta">#0025FA</color>
-    <color name="boton">#787A7A</color>
-    <color name="appbar">#475F77</color>
-    <color name="appbarletra">#000000</color>
+    <color name="background_principal">#151515</color>
+    <color name="letra">#FFFFFF</color>
+    <color name="etiqueta">#4970E3</color>
+    <color name="boton">#A6A8A8</color>
+    <color name="appbar">#18334E</color>
+    <color name="appbarletra">#FFFFFF</color>
     <color name="recetafondo">#5A5B5C</color>
 
 <!--

@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/options_graph"
-    app:startDestination="@id/optionsFragment">
+    app:startDestination="@id/options_vacio">
+
 
     <fragment
-        android:id="@+id/optionsFragment"
-        android:name="com.jose_sanchis_hueso.CasualChef.OptionsFragment"
-        android:label="fragment_options"
-        tools:layout="@layout/fragment_options" />
+        android:id="@+id/options_vacio"
+        android:name="com.jose_sanchis_hueso.CasualChef.Options_vacio"
+        android:label="fragment_options_vacio"
+        tools:layout="@layout/fragment_options_vacio" />
 </navigation>

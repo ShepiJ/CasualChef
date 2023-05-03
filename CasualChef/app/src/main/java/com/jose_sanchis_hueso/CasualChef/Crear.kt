@@ -9,26 +9,23 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
 import android.text.Editable
-import android.text.InputType
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.jose_sanchis_hueso.CasualChef.databinding.ActivityCrearBinding
-import com.jose_sanchis_hueso.CasualChef.databinding.ActivityEditarRecetaBinding
-import ponerImagenUsuario
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -40,7 +37,6 @@ class Crear : AppCompatActivity() {
 
     companion object {
         const val GALLERY_REQUEST_CODE = 100
-        const val MAX_IMAGE_SIZE = 1024 // 1 MB in kilobytes
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +54,7 @@ class Crear : AppCompatActivity() {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                fragment_edit_receta.GALLERY_REQUEST_CODE
+                GALLERY_REQUEST_CODE
             )
         } else {
         }
@@ -136,6 +132,7 @@ class Crear : AppCompatActivity() {
                         val username = sharedPrefs.getString("username", "")
                         val firestore = FirebaseFirestore.getInstance()
                         val cosas: MutableMap<String, Any> = HashMap()
+
                         cosas["id"] = UUID.randomUUID().toString()
                         cosas["nombre"] = binding.nombreReceta.text.toString()
                         cosas["desarrollador"] = username.toString()
@@ -156,7 +153,6 @@ class Crear : AppCompatActivity() {
                         cosas["tiempoPrep"] =
                             binding.horas.text.toString() + ":" + binding.minutos.text.toString()
 
-                        // Upload the selected image to Firebase Storage
                         var imagenID: String = UUID.randomUUID().toString() + ".png"
 
                         val storageRef =
@@ -218,7 +214,7 @@ class Crear : AppCompatActivity() {
 
         binding.imagenSeleccion.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, fragment_edit_receta.GALLERY_REQUEST_CODE)
+            startActivityForResult(intent, GALLERY_REQUEST_CODE)
         }
 
     }
@@ -228,12 +224,12 @@ class Crear : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
 
-        if (requestCode == fragment_edit_receta.GALLERY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
-            // Get the selected image URI
+        if (requestCode == GALLERY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+
             imageUri = data.data
 
             if (imageUri != null) {
-                // Set the image view with the selected image after resizing it
+
                 binding.imagenSeleccion.setImageURI(null)
                 binding.imagenSeleccion.setImageBitmap(getResizedBitmap(imageUri))
             }
@@ -277,13 +273,11 @@ class Crear : AppCompatActivity() {
         resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
         val byteArray = outputStream.toByteArray()
 
-        // Create a new file in the app's local storage directory
         val resizedImageFile = File(this?.cacheDir, "resized_image.jpg")
         val fos = FileOutputStream(resizedImageFile)
         fos.write(byteArray)
         fos.close()
 
-        // Return the URI of the new file
         return Uri.fromFile(resizedImageFile)
     }
 

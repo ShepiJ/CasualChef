@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:background="@color/purple_700"
+    android:background="@color/appbar"
     android:orientation="vertical">
 
     <ImageView
@@ -12,14 +12,14 @@
         android:layout_width="70dp"
         android:layout_height="150dp"
         android:paddingTop="60dp"
-        app:srcCompat="@drawable/user"
+        app:srcCompat="@drawable/header"
         />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp"
-        android:textColor="@color/black"
+        android:paddingBottom="5dp"
+        android:textColor="@color/appbarletra"
         android:text="Menú"
         />
 </LinearLayout>
