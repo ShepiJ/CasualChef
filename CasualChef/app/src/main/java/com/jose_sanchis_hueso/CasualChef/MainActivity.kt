@@ -35,8 +35,12 @@ class MainActivity : AppCompatActivity(), OnItemClick {
 
         progressDialog.show()
 
-        //Coge los datos de la base de datos de forma anonima
-        FirebaseAuth.getInstance().signInAnonymously()
+        val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)
+        val username = sharedPrefs.getString("username", "")
+        val pass = sharedPrefs.getString("contraseña", "")
+
+
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(username.toString()+"@gmail.com", pass.toString())
             .addOnSuccessListener { authResult ->
                 guardarColeccionJson(this, "recetas", "recetas.json"){
                     progressDialog.dismiss()
@@ -44,8 +48,7 @@ class MainActivity : AppCompatActivity(), OnItemClick {
 
             }
 
-        val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)
-        val username = sharedPrefs.getString("username", "")
+
 
         if (username != null) {
             val appName = getString(R.string.app_name)

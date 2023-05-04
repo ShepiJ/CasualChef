@@ -124,7 +124,14 @@ class Crear : AppCompatActivity() {
                 // Para evitar mandar más de una publicacion a la vez
                 binding.btnMandar.isEnabled = false
 
-                FirebaseAuth.getInstance().signInAnonymously()
+                var hora = binding.horas.text.toString()
+                var minutos = binding.minutos.text.toString()
+
+                val sharedPrefsLogin = getSharedPreferences("login", Context.MODE_PRIVATE)
+                val username = sharedPrefsLogin.getString("username", "")
+                val pass = sharedPrefsLogin.getString("contraseña", "")
+
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(username.toString()+"@gmail.com", pass.toString())
                     .addOnSuccessListener { authResult ->
                         val user = authResult.user
                         val sharedPrefs =
@@ -150,8 +157,19 @@ class Crear : AppCompatActivity() {
                         val rating: Float = binding.dificultad.getRating()
                         val ratingDouble = rating.toDouble()
                         cosas["dificultad"] = ratingDouble.toString()
+
+                        if (horasEditText.text.toString().length == 1){
+                            val text = horasEditText.text.toString().padStart(2, '0')
+                            hora = text
+                        }
+
+                        if (minutosEditText.text.toString().length == 1){
+                            val text = minutosEditText.text.toString().padStart(2, '0')
+                            minutos = text
+                        }
+
                         cosas["tiempoPrep"] =
-                            binding.horas.text.toString() + ":" + binding.minutos.text.toString()
+                            hora + ":" + minutos
 
                         var imagenID: String = UUID.randomUUID().toString() + ".png"
 

@@ -116,6 +116,16 @@ class ActivityEditarReceta : AppCompatActivity() {
 
         binding.btnMandar.setOnClickListener {
 
+            if (horasEditText.toString().length == 1){
+                val text = horasEditText.text.toString().padStart(2, '0')
+                horasEditText.setText(text)
+            }
+
+            if (minutosEditText.toString().length == 1){
+                val text = minutosEditText.text.toString().padStart(2, '0')
+                minutosEditText.setText(text)
+            }
+
             //Checkeos por de que algo no hay nada sin escribir
             if (binding.nombreReceta.text.isNotEmpty() &&
                 binding.ingredientesReceta.text.isNotEmpty() &&
@@ -129,11 +139,17 @@ class ActivityEditarReceta : AppCompatActivity() {
                 // Para evitar mandar más de una publicacion a la vez
                 binding.btnMandar.isEnabled = false
 
+                var hora = binding.horas.text.toString()
+                var minutos = binding.minutos.text.toString()
 
                 val sharedPrefs = getSharedPreferences("idGuardadaReceta", Context.MODE_PRIVATE)
                 val idReceta = sharedPrefs.getString("ID", "")
 
-                FirebaseAuth.getInstance().signInAnonymously()
+                val sharedPrefsLogin = getSharedPreferences("login", Context.MODE_PRIVATE)
+                val username = sharedPrefsLogin.getString("username", "")
+                val pass = sharedPrefsLogin.getString("contraseña", "")
+
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(username.toString()+"@gmail.com", pass.toString())
                     .addOnSuccessListener { authResult ->
                         val user = authResult.user
                         val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)
@@ -158,8 +174,18 @@ class ActivityEditarReceta : AppCompatActivity() {
                         val rating: Float = binding.dificultad.getRating()
                         val ratingDouble = rating.toDouble()
                         cosas["dificultad"] = ratingDouble.toString()
+                        if (horasEditText.text.toString().length == 1){
+                            val text = horasEditText.text.toString().padStart(2, '0')
+                            hora = text
+                        }
+
+                        if (minutosEditText.text.toString().length == 1){
+                            val text = minutosEditText.text.toString().padStart(2, '0')
+                            minutos = text
+                        }
+
                         cosas["tiempoPrep"] =
-                            binding.horas.text.toString() + ":" + binding.minutos.text.toString()
+                            hora + ":" + minutos
 
                         // Upload the selected image to Firebase Storage
                         var imagenID: String = UUID.randomUUID().toString() + ".png"

@@ -128,7 +128,11 @@ class ActivityPreferencias_Interfaz : AppCompatActivity() {
     }
 
     fun hacerUpdate() {
-        FirebaseAuth.getInstance().signInAnonymously()
+        val sharedPrefsLogin = getSharedPreferences("login", Context.MODE_PRIVATE)
+        val username = sharedPrefsLogin.getString("username", "")
+        val pass = sharedPrefsLogin.getString("contraseña", "")
+
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(username.toString()+"@gmail.com", pass.toString())
             .addOnSuccessListener { authResult ->
 
                 val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)

@@ -5,6 +5,7 @@ import android.R
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +31,12 @@ class FiltroActivity : AppCompatActivity() , OnItemClick {
         spinner.adapter = adapter
 
         binding.buttonFiltrar.setOnClickListener {
+
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+            if (imm.isAcceptingText) {
+                imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+            }
 
             var filtroPreferencia =
                 this?.getSharedPreferences(

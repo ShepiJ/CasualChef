@@ -16,6 +16,9 @@ class Login : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var mAuth: FirebaseAuth
 
+    override fun onBackPressed() {
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -56,7 +59,7 @@ class Login : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if (email.contains(" ")) {
+            if (binding.cogerUsuario.text.toString().contains(" ")) {
                 Toast.makeText(
                     this,
                     "El correo electrónico no puede contener espacios",
@@ -96,7 +99,7 @@ class Login : AppCompatActivity() {
 
                         //Generando los datos usuario
 
-                        FirebaseAuth.getInstance().signInAnonymously()
+                        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                             .addOnSuccessListener { authResult ->
                                 val user = authResult.user
                                 val sharedPrefs = this.getSharedPreferences(
@@ -129,7 +132,7 @@ class Login : AppCompatActivity() {
 
                         //Generando los datos de interfaz del usuario
 
-                        FirebaseAuth.getInstance().signInAnonymously()
+                        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                             .addOnSuccessListener { authResult ->
                                 val user = authResult.user
                                 val sharedPrefs = this.getSharedPreferences(
@@ -159,7 +162,7 @@ class Login : AppCompatActivity() {
                             }
 
 
-                        FirebaseAuth.getInstance().signInAnonymously()
+                        mAuth.signInWithEmailAndPassword(email, password)
                             .addOnSuccessListener { authResult ->
                                 guardarColeccionJson(this, "datos_usuario", "usuarios.json")
                             }
