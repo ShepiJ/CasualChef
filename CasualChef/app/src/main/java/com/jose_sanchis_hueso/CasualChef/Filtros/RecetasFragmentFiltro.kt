@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jose_sanchis_hueso.CasualChef.adapters.MyRecyclerViewAdapter
-import com.jose_sanchis_hueso.CasualChef.model.Articulo
+import com.jose_sanchis_hueso.CasualChef.model.Receta
 
 
-class ArticulosFragmentFiltro(opcion: String) : Fragment() {
+class RecetasFragmentFiltro(opcion: String) : Fragment() {
     private var columnCount = 1
     var listener: OnItemClick? = null
     var filtro = opcion
@@ -44,10 +44,10 @@ class ArticulosFragmentFiltro(opcion: String) : Fragment() {
             val prefFiltro = sharedPrefs?.getString("filtroClase", "")
             val prefValor = sharedPrefs?.getString("valor", "")
 
-            val articuloList = if (filtro == prefValor) {
-                Articulo.getFiltro(requireContext(), prefValor)
+            val recetaLists = if (filtro == prefValor) {
+                Receta.getFiltro(requireContext(), prefValor)
             } else {
-                Articulo.getFiltro(requireContext()).filter {
+                Receta.getFiltro(requireContext()).filter {
                     when (prefFiltro) {
                         "tags" -> it.tags.contains(prefValor.toString(), ignoreCase = true)
                         "nombre" -> it.nombre.contains(prefValor.toString(), ignoreCase = true)
@@ -59,7 +59,7 @@ class ArticulosFragmentFiltro(opcion: String) : Fragment() {
                 }
             }
 
-            view.adapter = MyRecyclerViewAdapter(articuloList, listener)
+            view.adapter = MyRecyclerViewAdapter(recetaLists, listener)
         }
 
         return view

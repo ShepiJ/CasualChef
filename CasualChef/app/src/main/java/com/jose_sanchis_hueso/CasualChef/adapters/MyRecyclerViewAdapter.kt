@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.storage.FirebaseStorage
 import com.jose_sanchis_hueso.CasualChef.R
 import com.jose_sanchis_hueso.CasualChef.databinding.FragmentCartaArticuloBinding
-import com.jose_sanchis_hueso.CasualChef.model.Articulo
+import com.jose_sanchis_hueso.CasualChef.model.Receta
 import ponerImagen
 
 class MyRecyclerViewAdapter(
-    private val articuloList: List<Articulo>,
+    private val recetaList: List<Receta>,
     private val listener: OnItemClick?
 ) : RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder>() {
 
@@ -31,7 +31,7 @@ class MyRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val articulo = articuloList[position]
+        val articulo = recetaList[position]
         Log.d("ArticulosFragmentLog", "idEKISDE = ${articulo.id}")
         holder.tvNombre.text = articulo.nombre
         holder.tvDesarrollador.text = articulo.desarrollador
@@ -53,7 +53,7 @@ class MyRecyclerViewAdapter(
     }
 
 
-    override fun getItemCount(): Int = articuloList.size
+    override fun getItemCount(): Int = recetaList.size
 
     inner class ViewHolder(binding: FragmentCartaArticuloBinding) : RecyclerView.ViewHolder(binding.root),View.OnClickListener {
 
@@ -66,8 +66,8 @@ class MyRecyclerViewAdapter(
         }
 
         override fun onClick(view: View?) {
-            val articulo = view?.tag as Articulo
-            listener?.onIntemClick(articulo)
+            val receta = view?.tag as Receta
+            listener?.onIntemClick(receta)
         }
     }
 }

@@ -37,10 +37,11 @@ import java.util.*
 class ActivityEditarReceta : AppCompatActivity() {
     private lateinit var binding: ActivityEditarRecetaBinding
     private var imageUri: Uri? = null
+    private var nombreImagen: String = ""
+    var imagenClicked = false
 
     companion object {
         const val GALLERY_REQUEST_CODE = 100
-        const val MAX_IMAGE_SIZE = 1024 // 1 MB in kilobytes
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -116,12 +117,12 @@ class ActivityEditarReceta : AppCompatActivity() {
 
         binding.btnMandar.setOnClickListener {
 
-            if (horasEditText.toString().length == 1){
+            if (horasEditText.toString().length == 1) {
                 val text = horasEditText.text.toString().padStart(2, '0')
                 horasEditText.setText(text)
             }
 
-            if (minutosEditText.toString().length == 1){
+            if (minutosEditText.toString().length == 1) {
                 val text = minutosEditText.text.toString().padStart(2, '0')
                 minutosEditText.setText(text)
             }
@@ -132,8 +133,7 @@ class ActivityEditarReceta : AppCompatActivity() {
                 binding.descripcionReceta.text.isNotEmpty() &&
                 binding.tagsReceta.text.isNotEmpty() &&
                 binding.horas.text.isNotEmpty() &&
-                binding.minutos.text.isNotEmpty() &&
-                imageUri != null
+                binding.minutos.text.isNotEmpty()
             ) {
 
                 // Para evitar mandar más de una publicacion a la vez
@@ -149,7 +149,8 @@ class ActivityEditarReceta : AppCompatActivity() {
                 val username = sharedPrefsLogin.getString("username", "")
                 val pass = sharedPrefsLogin.getString("contraseña", "")
 
-                FirebaseAuth.getInstance().signInWithEmailAndPassword(username.toString()+"@gmail.com", pass.toString())
+                FirebaseAuth.getInstance()
+                    .signInWithEmailAndPassword(username.toString() + "@gmail.com", pass.toString())
                     .addOnSuccessListener { authResult ->
                         val user = authResult.user
                         val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)
@@ -174,12 +175,12 @@ class ActivityEditarReceta : AppCompatActivity() {
                         val rating: Float = binding.dificultad.getRating()
                         val ratingDouble = rating.toDouble()
                         cosas["dificultad"] = ratingDouble.toString()
-                        if (horasEditText.text.toString().length == 1){
+                        if (horasEditText.text.toString().length == 1) {
                             val text = horasEditText.text.toString().padStart(2, '0')
                             hora = text
                         }
 
-                        if (minutosEditText.text.toString().length == 1){
+                        if (minutosEditText.text.toString().length == 1) {
                             val text = minutosEditText.text.toString().padStart(2, '0')
                             minutos = text
                         }
@@ -187,83 +188,87 @@ class ActivityEditarReceta : AppCompatActivity() {
                         cosas["tiempoPrep"] =
                             hora + ":" + minutos
 
-                        // Upload the selected image to Firebase Storage
-                        var imagenID: String = UUID.randomUUID().toString() + ".png"
+                        if (imagenClicked) {
+                            var imagenID: String = UUID.randomUUID().toString() + ".png"
 
-                        val storageRef =
-                            FirebaseStorage.getInstance().reference.child("images/${imagenID}")
+                            val storageRef =
+                                FirebaseStorage.getInstance().reference.child("images/${imagenID}")
 
-                        val uploadTask =
-                            imageUri?.let { resizeImage(it) }?.let { storageRef.putFile(it) }
-                        uploadTask?.continueWithTask { task ->
-                            if (!task.isSuccessful) {
-                                task.exception?.let {
-                                    throw it
-                                }
-                            }
-                            storageRef.downloadUrl
-                        }?.addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                cosas["imagen"] = imagenID
+                            val uploadTask =
+                                imageUri?.let { resizeImage(it) }?.let { storageRef.putFile(it) }
+                            uploadTask?.continueWithTask { task ->
+                                if (!task.isSuccessful) {
+                                    task.exception?.let {
+                                        throw it
 
-                                firestore.collection("recetas")
-                                    .whereEqualTo("id", idReceta.toString())
-                                    .get()
-                                    .addOnSuccessListener { documents ->
-                                        if (documents.size() > 0) {
-                                            val document = documents.documents[0]
-                                            // Update the `cosas` map in the document
-                                            document.reference.update(cosas)
-                                                .addOnSuccessListener {
-                                                    Toast.makeText(
-                                                        this,
-                                                        "Se ha actualizado la receta",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    Handler().postDelayed({
-                                                        val intent =
-                                                            Intent(this, MainActivity::class.java)
-                                                        startActivity(intent)
-                                                    }, 2000)
-                                                }
-
-                                                .addOnFailureListener { e ->
-                                                    Log.e(ContentValues.TAG, "DBFallo", e)
-                                                    Toast.makeText(
-                                                        this,
-                                                        "Ha habido un error al actualizar la receta",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                }
-                                        }
-                                    }?.addOnFailureListener { e ->
-                                        Log.e(ContentValues.TAG, "UploadFallo", e)
-                                        Toast.makeText(
-                                            this,
-                                            "Ha habido un error al subir la imagen",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
                                     }
-                            } else {
+                                }
+
+                                storageRef.downloadUrl
+                            }
+                        } else {
+                            cosas["imagen"] = nombreImagen
+                        }
+                        firestore.collection("recetas")
+                            .whereEqualTo("id", idReceta.toString())
+                            .get()
+                            .addOnSuccessListener { documents ->
+                                if (documents.size() > 0) {
+                                    val document = documents.documents[0]
+                                    // Update the `cosas` map in the document
+                                    document.reference.update(cosas)
+                                        .addOnSuccessListener {
+                                            Toast.makeText(
+                                                this,
+                                                "Se ha actualizado la receta",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            Handler().postDelayed({
+                                                val intent =
+                                                    Intent(this, MainActivity::class.java)
+                                                startActivity(intent)
+                                            }, 2000)
+                                        }
+
+                                        .addOnFailureListener { e ->
+                                            Log.e(ContentValues.TAG, "DBFallo", e)
+                                            Toast.makeText(
+                                                this,
+                                                "Ha habido un error al actualizar la receta",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                }
+                            }?.addOnFailureListener { e ->
+                                Log.e(ContentValues.TAG, "UploadFallo", e)
                                 Toast.makeText(
                                     this,
-                                    "Por favor, completa todos los campos",
+                                    "Ha habido un error al subir la imagen",
                                     Toast.LENGTH_SHORT
-                                )
-                                    .show()
+                                ).show()
                             }
-                        }
                     }
+
+            } else {
+                Toast.makeText(
+                    this,
+                    "Por favor, completa todos los campos",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
             }
+
         }
 
         binding.imagenSeleccion.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(intent, GALLERY_REQUEST_CODE)
+            if (imageUri != null) {
+                imagenClicked = true
+            }
         }
 
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -360,7 +365,9 @@ class ActivityEditarReceta : AppCompatActivity() {
 
                         val tiempo = userData?.get("tiempoPrep").toString()
 
-                        val rutaImagen = File(cacheDir, userData?.get("imagen").toString()+".jpg")
+                        nombreImagen = userData?.get("imagen").toString()
+
+                        val rutaImagen = File(cacheDir, userData?.get("imagen").toString() + ".jpg")
                         imageUri = rutaImagen.toUri()
 
                         val horas = tiempo.substring(0, 2)

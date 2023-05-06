@@ -36,7 +36,7 @@ class ActivityDatos_Usuario : AppCompatActivity() {
 
         val firestore = FirebaseFirestore.getInstance()
         firestore.collection("datos_usuario")
-            .whereEqualTo("usuario", username)
+            .whereEqualTo("usuario", username.toString())
             .get()
             .addOnSuccessListener { querySnapshot ->
 
@@ -57,7 +57,7 @@ class ActivityDatos_Usuario : AppCompatActivity() {
                                 val imageUrl = task.result.toString()
                                 username+".png".ponerImagenUsuario(this@ActivityDatos_Usuario, imageUrl, imagenUsu)
                             } else {
-                                imagenUsu.setImageResource(R.drawable.casualchef)
+                                imagenUsu.setImageResource(R.drawable.user)
                             }
                         }
 
@@ -87,7 +87,11 @@ class ActivityDatos_Usuario : AppCompatActivity() {
 
         binding.pasarMain.setOnClickListener {
             hacerUpdate()
-            uploadImageToFirebaseStorage()
+            try {
+                uploadImageToFirebaseStorage()
+            } catch (e: Exception) {
+                //Si no has puesto foto saldrá este error controlado
+            }
             Toast.makeText(
                 this,
                 "Se han guardado los datos correctamente",
@@ -166,28 +170,36 @@ class ActivityDatos_Usuario : AppCompatActivity() {
         val username = sharedPrefs.getString("username", "")
         val pass = sharedPrefs.getString("contraseña", "")
 
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(username.toString()+"@gmail.com", pass.toString())
+        FirebaseAuth.getInstance()
+            .signInWithEmailAndPassword(username.toString() + "@gmail.com", pass.toString())
             .addOnSuccessListener { authResult ->
 
-
                 val firestore = FirebaseFirestore.getInstance()
+                val query = firestore.collection("datos_usuario")
+                    .whereEqualTo("usuario", username.toString())
 
-                val datos_usuario_Nuevo: MutableMap<String, Any> = HashMap()
-                datos_usuario_Nuevo["usuario"] = username.toString()
-                datos_usuario_Nuevo["nombre"] = binding.usuarioUsu.text.toString()
-                datos_usuario_Nuevo["apellido"] = binding.apellidoUsu.text.toString()
-                datos_usuario_Nuevo["email"] = binding.emailUsu.text.toString()
-                datos_usuario_Nuevo["telefono"] = binding.telefonoUsu.text.toString()
-                datos_usuario_Nuevo["imagen"] = username.toString()+".png"
-                datos_usuario_Nuevo["descripcion"] = binding.descripcionUsu.text.toString()
+                query.get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            val updateData: MutableMap<String, Any> = HashMap()
+                            updateData["nombre"] = binding.usuarioUsu.text.toString()
+                            updateData["apellido"] = binding.apellidoUsu.text.toString()
+                            updateData["email"] = binding.emailUsu.text.toString()
+                            updateData["telefono"] = binding.telefonoUsu.text.toString()
+                            updateData["imagen"] = username.toString() + ".png"
+                            updateData["descripcion"] = binding.descripcionUsu.text.toString()
 
-                firestore.collection("datos_usuario").document(username.toString())
-                    .set(datos_usuario_Nuevo)
-                    .addOnSuccessListener {
-                        Log.d(TAG, "Document updated successfully")
+                            document.reference.update(updateData)
+                                .addOnSuccessListener {
+                                    Log.d(TAG, "Document updated successfully")
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.e(TAG, "Error updating document", e)
+                                }
+                        }
                     }
                     .addOnFailureListener { e ->
-                        Log.e(TAG, "Error updating document", e)
+                        Log.e(TAG, "Error querying document", e)
                     }
             }
     }

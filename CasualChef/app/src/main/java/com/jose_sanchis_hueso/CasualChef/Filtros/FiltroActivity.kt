@@ -7,11 +7,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import android.widget.SeekBar
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.jose_sanchis_hueso.CasualChef.databinding.ActivityFiltroBinding
-import com.jose_sanchis_hueso.CasualChef.model.Articulo
+import com.jose_sanchis_hueso.CasualChef.model.Receta
 
 class FiltroActivity : AppCompatActivity() , OnItemClick {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +23,15 @@ class FiltroActivity : AppCompatActivity() , OnItemClick {
 
         binding = ActivityFiltroBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.dificultadSlider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                binding.dificultad.text = progress.toDouble().toString()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
 
         //Para el spinner
         val spinner: Spinner = binding.spinnerFiltro
@@ -46,6 +56,12 @@ class FiltroActivity : AppCompatActivity() , OnItemClick {
             filtroPreferencia?.edit()
                 ?.putString("filtroClase", spinner.selectedItem.toString())
                 ?.putString("valor", binding.textoFiltrar.text.toString())
+                ?.putString("dificultad", binding.dificultadSlider.progress.toDouble().toString())
+                ?.putString("bool1", binding.bool1.isChecked.toString())
+                ?.putString("bool2", binding.bool2.isChecked.toString())
+                ?.putString("bool3", binding.bool3.isChecked.toString())
+                ?.putString("bool4", binding.bool4.isChecked.toString())
+                ?.putString("bool5", binding.bool5.isChecked.toString())
                 ?.apply()
 
             val navHostFragment =
@@ -74,15 +90,26 @@ class FiltroActivity : AppCompatActivity() , OnItemClick {
 
     }
 
-    private fun abrirDetalle(id:String) {
+    private fun abrirDetalle(id: String) {
+        try {
+            var guardarIdReceta =
+                this?.getSharedPreferences(
+                    "idGuardadaReceta",
+                    MODE_PRIVATE
+                )
+            guardarIdReceta?.edit()
+                ?.putString("ID", id)
+                ?.apply()
 
-        val intent = Intent(this,DetalleActivity::class.java)
-        intent.putExtra("ID",id)
-        startActivity(intent)
+            val intent = Intent(this, DetalleActivity::class.java)
+            intent.putExtra("ID", id)
+            startActivity(intent)
+        } catch (e: Exception) {
+        }
     }
 
-    override fun onIntemClick(articulo: Articulo) {
-        abrirDetalle(articulo.id)
+    override fun onIntemClick(receta: Receta) {
+        abrirDetalle(receta.id)
 
     }
 

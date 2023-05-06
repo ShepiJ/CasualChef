@@ -1,7 +1,6 @@
 package com.jose_sanchis_hueso.CasualChef
 
 import OnItemClick
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -16,7 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.GsonBuilder
 import com.jose_sanchis_hueso.CasualChef.databinding.ActivityMainBinding
-import com.jose_sanchis_hueso.CasualChef.model.Articulo
+import com.jose_sanchis_hueso.CasualChef.model.Receta
 import java.io.OutputStream
 
 class MainActivity : AppCompatActivity(), OnItemClick {
@@ -25,15 +24,8 @@ class MainActivity : AppCompatActivity(), OnItemClick {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
     private lateinit var navControllerDrawer: NavController
-    private lateinit var progressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Cargando...")
-        progressDialog.setCancelable(false)
-
-        progressDialog.show()
 
         val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)
         val username = sharedPrefs.getString("username", "")
@@ -42,10 +34,7 @@ class MainActivity : AppCompatActivity(), OnItemClick {
 
         FirebaseAuth.getInstance().signInWithEmailAndPassword(username.toString()+"@gmail.com", pass.toString())
             .addOnSuccessListener { authResult ->
-                guardarColeccionJson(this, "recetas", "recetas.json"){
-                    progressDialog.dismiss()
-                }
-
+                guardarColeccionJson(this, "recetas", "recetas.json")
             }
 
 
@@ -159,8 +148,8 @@ class MainActivity : AppCompatActivity(), OnItemClick {
 
     }
 
-    override fun onIntemClick(articulo: Articulo) {
-        abrirDetalle(articulo.id)
+    override fun onIntemClick(receta: Receta) {
+        abrirDetalle(receta.id)
 
     }
 
@@ -168,7 +157,6 @@ class MainActivity : AppCompatActivity(), OnItemClick {
         context: Context,
         coleccion: String,
         nombreFichero: String,
-        callback: () -> Unit
     ) {
         val db = FirebaseFirestore.getInstance()
 
@@ -186,9 +174,6 @@ class MainActivity : AppCompatActivity(), OnItemClick {
                 context.openFileOutput(nombreFichero, Context.MODE_PRIVATE)
             outputStream.write(json.toByteArray())
             outputStream.close()
-
-            // Call the callback when the data is downloaded
-            callback()
         }
     }
 

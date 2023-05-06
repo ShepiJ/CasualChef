@@ -5,13 +5,14 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.jose_sanchis_hueso.CasualChef.databinding.ActivityDetalleBinding
-import com.jose_sanchis_hueso.CasualChef.model.Articulo
+import com.jose_sanchis_hueso.CasualChef.model.Receta
 import ponerImagen
 
 class DetalleActivity : AppCompatActivity() {
@@ -54,8 +55,12 @@ class DetalleActivity : AppCompatActivity() {
                                     "Se ha borrado la receta sin problemas",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                val intent = Intent(this, MainActivity::class.java)
-                                startActivity(intent)
+                                val handler = Handler()
+                                handler.postDelayed({
+                                    val intent = Intent(this, MainActivity::class.java)
+                                    startActivity(intent)
+                                }, 2000)
+
                             }
                             .addOnFailureListener { e ->
                                 Toast.makeText(
@@ -88,7 +93,7 @@ class DetalleActivity : AppCompatActivity() {
     private fun cargarVideoJuego() {
         try {
             val id = intent.getStringExtra("ID")
-            val articulo = Articulo.getVideoJuegoPorId(id.toString(), this)
+            val receta = Receta.getRecetaId(id.toString(), this)
 
             val imageView = binding.imageView
             val tvNombre = binding.tvNombre
@@ -98,18 +103,18 @@ class DetalleActivity : AppCompatActivity() {
             val tvDescripcion = binding.tvDescripcion
 
             val storageRef =
-                FirebaseStorage.getInstance().reference.child("images/${articulo.imagen}")
+                FirebaseStorage.getInstance().reference.child("images/${receta.imagen}")
             storageRef.downloadUrl.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val imageUrl = task.result.toString()
-                    articulo.imagen.ponerImagen(this, imageUrl, imageView)
+                    receta.imagen.ponerImagen(this, imageUrl, imageView)
                 } else {
                     imageView.setImageResource(R.drawable.casualchef)
                 }
             }
 
             val ratingBar = binding.ratingBar
-            ratingBar.rating = articulo.dificultad.toFloat()
+            ratingBar.rating = receta.dificultad.toFloat()
 
             when (ratingBar.rating) {
                 in 0.0..1.0 -> ratingBar.progressTintList = ColorStateList.valueOf(Color.GREEN)
@@ -122,19 +127,19 @@ class DetalleActivity : AppCompatActivity() {
                     ColorStateList.valueOf(Color.parseColor("#8B0000"))
             }
 
-            binding.tiempoPrep.text = articulo.tiempoPrep
+            binding.tiempoPrep.text = receta.tiempoPrep
 
-            binding.bool1.isChecked = articulo.condiciones[0]
-            binding.bool2.isChecked = articulo.condiciones[1]
-            binding.bool3.isChecked = articulo.condiciones[2]
-            binding.bool4.isChecked = articulo.condiciones[3]
-            binding.bool5.isChecked = articulo.condiciones[4]
+            binding.bool1.isChecked = receta.condiciones[0]
+            binding.bool2.isChecked = receta.condiciones[1]
+            binding.bool3.isChecked = receta.condiciones[2]
+            binding.bool4.isChecked = receta.condiciones[3]
+            binding.bool5.isChecked = receta.condiciones[4]
 
-            tvNombre.text = articulo.nombre
-            tvDeveloper.text = articulo.desarrollador
-            tvTag1.text = articulo.tags
-            tvIngredients.text = articulo.ingredientes
-            tvDescripcion.text = articulo.descripcion
+            tvNombre.text = receta.nombre
+            tvDeveloper.text = receta.desarrollador
+            tvTag1.text = receta.tags
+            tvIngredients.text = receta.ingredientes
+            tvDescripcion.text = receta.descripcion
 
             val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)
             val username = sharedPrefs.getString("username", "")

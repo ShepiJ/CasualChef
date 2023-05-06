@@ -70,7 +70,7 @@
             tools:layout_editor_absoluteX="128dp"
             tools:layout_editor_absoluteY="213dp" />
 
-    <LinearLayout
+        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
@@ -199,12 +199,12 @@
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:text="Condiciones"
             android:textColor="@color/etiqueta"
             android:textSize="15sp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:layout_gravity="center"
             tools:layout_editor_absoluteX="126dp"
             tools:layout_editor_absoluteY="546dp" />
 
@@ -253,7 +253,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Vegetarian"
+                android:text="Vegetariano"
                 tools:ignore="TouchTargetSizeCheck" />
 
             <CheckBox

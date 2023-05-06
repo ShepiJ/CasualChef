@@ -1,10 +1,20 @@
 package com.jose_sanchis_hueso.CasualChef
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Handler
+import android.view.View
+import android.view.animation.AnticipateInterpolator
+import android.view.animation.DecelerateInterpolator
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.animation.doOnEnd
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.GsonBuilder
@@ -16,19 +26,41 @@ class Login : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var mAuth: FirebaseAuth
 
+
     override fun onBackPressed() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val screenSplash = installSplashScreen()
+        screenSplash.setKeepOnScreenCondition { false }
+
+        //para filtros
+        var filtroPreferencia =
+            this?.getSharedPreferences(
+                "filtro",
+                MODE_PRIVATE
+            )
+        filtroPreferencia?.edit()
+            ?.putString("filtroClase", "autor")
+            ?.putString("valor", "")
+            ?.putString("dificultad", "0.0")
+            ?.putString("bool1", "false")
+            ?.putString("bool2", "false")
+            ?.putString("bool3", "false")
+            ?.putString("bool4", "false")
+            ?.putString("bool5", "false")
+            ?.apply()
 
         val sharedPref = getSharedPreferences("login", Context.MODE_PRIVATE)
         val isChecked = sharedPref.getBoolean("checkbox_checked", false)
 
         if (isChecked) {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            Handler().postDelayed({
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }, 0)
         }
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -39,6 +71,9 @@ class Login : AppCompatActivity() {
         //Coge los datos de la base de datos de forma anonima
         FirebaseAuth.getInstance().signInAnonymously()
             .addOnSuccessListener { authResult ->
+
+
+
                 guardarColeccionJson(this, "recetas", "recetas.json")
             }
 
@@ -85,18 +120,6 @@ class Login : AppCompatActivity() {
                             ?.putBoolean("checkbox_checked", binding.checkBox.isChecked)
                             ?.apply()
 
-                        //para filtros
-                        var filtroPreferencia =
-                            this?.getSharedPreferences(
-                                "filtro",
-                                MODE_PRIVATE
-                            )
-                        filtroPreferencia?.edit()
-                            ?.putString("filtroClase", "autor")
-                            ?.putString("valor", "")
-                            ?.apply()
-
-
                         //Generando los datos usuario
 
                         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
@@ -114,8 +137,7 @@ class Login : AppCompatActivity() {
                                     .get()
                                     .addOnSuccessListener { querySnapshot ->
                                         if (querySnapshot.isEmpty) {
-                                            val datos_usuario_Nuevo: MutableMap<String, Any> =
-                                                HashMap()
+                                            val datos_usuario_Nuevo: MutableMap<String, Any> = HashMap()
                                             datos_usuario_Nuevo["usuario"] = username.toString()
                                             datos_usuario_Nuevo["nombre"] = "default"
                                             datos_usuario_Nuevo["apellido"] = "default"
@@ -132,40 +154,103 @@ class Login : AppCompatActivity() {
 
                         //Generando los datos de interfaz del usuario
 
-                        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
-                            .addOnSuccessListener { authResult ->
-                                val user = authResult.user
-                                val sharedPrefs = this.getSharedPreferences(
-                                    "login",
-                                    Context.MODE_PRIVATE
-                                )
-                                val username = sharedPrefs.getString("username", "")
-                                val firestore = FirebaseFirestore.getInstance()
+                        val nightModeFlags =
+                            this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+                        when (nightModeFlags) {
+                            Configuration.UI_MODE_NIGHT_YES -> {
+                                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                                    .addOnSuccessListener { authResult ->
+                                        val user = authResult.user
+                                        val sharedPrefs = this.getSharedPreferences(
+                                            "login",
+                                            Context.MODE_PRIVATE
+                                        )
+                                        val username = sharedPrefs.getString("username", "")
+                                        val firestore = FirebaseFirestore.getInstance()
 
-                                firestore.collection("preferencias_interfaz")
-                                    .whereEqualTo("usuario", username.toString())
-                                    .get()
-                                    .addOnSuccessListener { querySnapshot ->
-                                        if (querySnapshot.isEmpty) {
-                                            val datos_interfaz_usuario: MutableMap<String, Any> =
-                                                HashMap()
-                                            datos_interfaz_usuario["usuario"] = username.toString()
-                                            datos_interfaz_usuario["colorLetra"] = "#000000"
-                                            datos_interfaz_usuario["colorEtiqueta"] = "#0025FA"
-                                            datos_interfaz_usuario["colorBotones"] = "#787A7A"
-                                            datos_interfaz_usuario["fondoColorReceta"] = "#5A5B5C"
+                                        firestore.collection("preferencias_interfaz")
+                                            .whereEqualTo("usuario", username.toString())
+                                            .get()
+                                            .addOnSuccessListener { querySnapshot ->
+                                                if (querySnapshot.isEmpty) {
+                                                    val datos_interfaz_usuario: MutableMap<String, Any> =
+                                                        HashMap()
+                                                    datos_interfaz_usuario["usuario"] = username.toString()
+                                                    datos_interfaz_usuario["colorLetra"] = "#FFFFFF"
+                                                    datos_interfaz_usuario["colorEtiqueta"] = "#4970E3"
+                                                    datos_interfaz_usuario["colorBotones"] = "#A6A8A8"
+                                                    datos_interfaz_usuario["fondoColorReceta"] = "#151515"
 
-                                            firestore.collection("preferencias_interfaz")
-                                                .add(datos_interfaz_usuario)
-                                        }
+                                                    firestore.collection("preferencias_interfaz")
+                                                        .add(datos_interfaz_usuario)
+                                                }
+                                            }
+                                    }
+                            }
+                            Configuration.UI_MODE_NIGHT_NO -> {
+                                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                                    .addOnSuccessListener { authResult ->
+                                        val user = authResult.user
+                                        val sharedPrefs = this.getSharedPreferences(
+                                            "login",
+                                            Context.MODE_PRIVATE
+                                        )
+                                        val username = sharedPrefs.getString("username", "")
+                                        val firestore = FirebaseFirestore.getInstance()
+
+                                        firestore.collection("preferencias_interfaz")
+                                            .whereEqualTo("usuario", username.toString())
+                                            .get()
+                                            .addOnSuccessListener { querySnapshot ->
+                                                if (querySnapshot.isEmpty) {
+                                                    val datos_interfaz_usuario: MutableMap<String, Any> =
+                                                        HashMap()
+                                                    datos_interfaz_usuario["usuario"] = username.toString()
+                                                    datos_interfaz_usuario["colorLetra"] = "#000000"
+                                                    datos_interfaz_usuario["colorEtiqueta"] = "#0025FA"
+                                                    datos_interfaz_usuario["colorBotones"] = "#787A7A"
+                                                    datos_interfaz_usuario["fondoColorReceta"] = "#8799AC"
+
+                                                    firestore.collection("preferencias_interfaz")
+                                                        .add(datos_interfaz_usuario)
+                                                }
+                                            }
                                     }
                             }
 
+                            Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                                    .addOnSuccessListener { authResult ->
+                                        val user = authResult.user
+                                        val sharedPrefs = this.getSharedPreferences(
+                                            "login",
+                                            Context.MODE_PRIVATE
+                                        )
+                                        val username = sharedPrefs.getString("username", "")
+                                        val firestore = FirebaseFirestore.getInstance()
 
-                        mAuth.signInWithEmailAndPassword(email, password)
-                            .addOnSuccessListener { authResult ->
-                                guardarColeccionJson(this, "datos_usuario", "usuarios.json")
+                                        firestore.collection("preferencias_interfaz")
+                                            .whereEqualTo("usuario", username.toString())
+                                            .get()
+                                            .addOnSuccessListener { querySnapshot ->
+                                                if (querySnapshot.isEmpty) {
+                                                    val datos_interfaz_usuario: MutableMap<String, Any> =
+                                                        HashMap()
+                                                    datos_interfaz_usuario["usuario"] = username.toString()
+                                                    datos_interfaz_usuario["colorLetra"] = "#000000"
+                                                    datos_interfaz_usuario["colorEtiqueta"] = "#0025FA"
+                                                    datos_interfaz_usuario["colorBotones"] = "#787A7A"
+                                                    datos_interfaz_usuario["fondoColorReceta"] = "#8799AC"
+
+                                                    firestore.collection("preferencias_interfaz")
+                                                        .add(datos_interfaz_usuario)
+                                                }
+                                            }
+                                    }
                             }
+                        }
+
+
 
 
                         //Ir al main
@@ -231,40 +316,5 @@ class Login : AppCompatActivity() {
 
 
 /**
-val screenSplash = installSplashScreen()
-screenSplash.setKeepOnScreenCondition { false }
 
-Thread.sleep(1000)
-screenSplash.setOnExitAnimationListener { splashScreenView ->
-val slideBack = ObjectAnimator.ofFloat(
-splashScreenView.view,
-View.TRANSLATION_Y,
-0f,
-splashScreenView.view.width.toFloat(),
--splashScreenView.view.width.toFloat()
-).apply {
-interpolator = DecelerateInterpolator()
-duration = 600
-doOnEnd { splashScreenView.remove() }
-}
-
-val icon = splashScreenView.iconView
-val iconAnimator = ValueAnimator
-.ofInt(icon.height, 0)
-.setDuration(1000)
-
-iconAnimator.addUpdateListener {
-val value = it.animatedValue as Int
-icon.layoutParams.width = value
-icon.layoutParams.height = value
-icon.requestLayout()
-if (value == 0) slideBack.start()
-}
-
-AnimatorSet().apply {
-interpolator = AnticipateInterpolator(5f)
-play(iconAnimator)
-start()
-}
-}
  **/

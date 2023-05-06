@@ -30,6 +30,11 @@ class Registracion : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            if (binding.cogerUsuario.text.toString().equals("Anónimo")) {
+                Toast.makeText(this, "No puedes registrarte como Anónimo", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             if (binding.cogerUsuario.text.toString().isBlank()) {
                 Toast.makeText(this, "El campo Usuario no puede estar vacio", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener

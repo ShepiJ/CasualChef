@@ -1,5 +1,5 @@
-import com.jose_sanchis_hueso.CasualChef.model.Articulo
+import com.jose_sanchis_hueso.CasualChef.model.Receta
 
 interface OnItemClick {
-    fun onIntemClick(articulo: Articulo)
+    fun onIntemClick(receta: Receta)
 }

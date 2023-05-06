@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jose_sanchis_hueso.CasualChef.R
 import com.jose_sanchis_hueso.CasualChef.adapters.MyRecyclerViewAdapter
-import com.jose_sanchis_hueso.CasualChef.model.Articulo
+import com.jose_sanchis_hueso.CasualChef.model.Receta
 
 
-class ArticulosFragment(desarrollador: String) : Fragment() {
+class RecetasFragment(desarrollador: String) : Fragment() {
     private var columnCount = 1
     var listener: OnItemClick? = null
     var desarrollador = desarrollador
@@ -45,12 +45,12 @@ class ArticulosFragment(desarrollador: String) : Fragment() {
             val sharedPrefs = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
             val username = sharedPrefs.getString("username", "")
 
-            val articuloList = if (desarrollador == username) {
-                Articulo.getArticulo(requireContext(), username)
+            val recetaLists = if (desarrollador == username) {
+                Receta.getReceta(requireContext(), username)
             } else {
-                Articulo.getArticulo(requireContext()).filter { it.desarrollador != username }
+                Receta.getReceta(requireContext()).filter { it.desarrollador != username }
             }
-            view.adapter = MyRecyclerViewAdapter(articuloList, listener)
+            view.adapter = MyRecyclerViewAdapter(recetaLists, listener)
         }
         return view
     }

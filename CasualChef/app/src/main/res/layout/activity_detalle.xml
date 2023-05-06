@@ -145,7 +145,7 @@
         android:layout_marginTop="20dp"
         android:clickable="false"
         android:focusable="false"
-        android:text="Vegetarian"
+        android:text="Vegetariano"
         app:layout_constraintEnd_toEndOf="@+id/bool3"
         app:layout_constraintStart_toStartOf="@+id/bool3"
         app:layout_constraintTop_toBottomOf="@+id/bool3" />

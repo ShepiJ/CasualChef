@@ -47,9 +47,9 @@ import com.jose_sanchis_hueso.CasualChef.databinding.FragmentTabbedPrincipalBind
 
                 //Dependiendo de que posicion esté el fragmento cargará los articulos dependiendo del tipo que tengas
                 return when(position){
-                    0 -> ArticulosFragment(username.toString())
-                    1 -> ArticulosFragment("otro")
-                    else -> ArticulosFragment("otro")
+                    0 -> RecetasFragment(username.toString())
+                    1 -> RecetasFragment("otro")
+                    else -> RecetasFragment("otro")
                 }
             }
         }

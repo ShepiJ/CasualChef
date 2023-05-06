@@ -9,6 +9,20 @@
     tools:context=".FiltroActivity"
     android:orientation="vertical">
 
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Selector de criterios de búsqueda"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textColor="@color/etiqueta"
+        android:textSize="15sp"
+        tools:layout_editor_absoluteX="138dp"
+        tools:layout_editor_absoluteY="46dp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,10 +30,11 @@
 
         <EditText
             android:id="@+id/textoFiltrar"
-            android:layout_width="160dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
+            android:layout_weight="1"
             android:text=""
             android:textColor="@color/letra"
             tools:layout_editor_absoluteX="0dp"
@@ -28,19 +43,131 @@
         <Spinner
             android:id="@+id/spinnerFiltro"
             android:background="@drawable/spinner_border"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dificultad de la receta"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textColor="@color/etiqueta"
+        android:textSize="15sp"
+        tools:layout_editor_absoluteX="138dp"
+        tools:layout_editor_absoluteY="46dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/dificultad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="5dp"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:text="0.0"/>
+
+        <SeekBar
+            android:id="@+id/dificultad_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="5"
+            android:progress="0"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Condiciones"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textColor="@color/etiqueta"
+        android:textSize="15sp"
+        tools:layout_editor_absoluteX="138dp"
+        tools:layout_editor_absoluteY="46dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/bool1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="105dp"
+            android:layout_weight="1"
+            android:text="Diabetica"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <CheckBox
+            android:id="@+id/bool2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="50dp"
+            android:layout_weight="1"
+            android:text="Sin Gluten"
+            tools:ignore="TouchTargetSizeCheck" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/bool3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Sin Lactosa"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <CheckBox
+            android:id="@+id/bool4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Vegetariano"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <CheckBox
+            android:id="@+id/bool5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Pocas Calorias"
+            tools:ignore="TouchTargetSizeCheck" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/buttonFiltrar"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
+            android:layout_weight="1"
             android:background="@drawable/border_button"
             android:backgroundTint="@color/boton"
-            android:layout_weight="1"
             android:text="Filtrar" />
-
 
     </LinearLayout>
 

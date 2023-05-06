@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_principal"
-    tools:context=".ActivityDatos_Usuario">
+    tools:context=".ActivityDatos_Usuario"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <TextView
         android:id="@+id/usuarioUsu"
@@ -141,7 +142,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView15"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView15"
@@ -248,6 +251,7 @@
         android:paddingEnd="10dp"
         android:text="Guardar Cambios"
         android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/imagenUsu"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TouchTargetSizeCheck" />

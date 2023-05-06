@@ -19,12 +19,12 @@ class ActivityDatos_UsuarioLite : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        val sharedPrefs = getSharedPreferences("usuario", Context.MODE_PRIVATE)
+        val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)
         val username = sharedPrefs.getString("username", "")
 
         val firestore = FirebaseFirestore.getInstance()
         firestore.collection("datos_usuario")
-            .whereEqualTo("usuario", username)
+            .whereEqualTo("usuario", username.toString())
             .get()
             .addOnSuccessListener { querySnapshot ->
 

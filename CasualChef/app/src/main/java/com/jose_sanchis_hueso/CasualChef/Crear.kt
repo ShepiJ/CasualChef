@@ -25,10 +25,12 @@ import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.gson.GsonBuilder
 import com.jose_sanchis_hueso.CasualChef.databinding.ActivityCrearBinding
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.io.OutputStream
 import java.util.*
 
 class Crear : AppCompatActivity() {
@@ -199,6 +201,16 @@ class Crear : AppCompatActivity() {
                                             Toast.LENGTH_SHORT
                                         )
                                             .show()
+
+                                        val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)
+                                        val username = sharedPrefs.getString("username", "")
+                                        val pass = sharedPrefs.getString("contraseña", "")
+
+                                        FirebaseAuth.getInstance().signInWithEmailAndPassword(username.toString()+"@gmail.com", pass.toString())
+                                            .addOnSuccessListener { authResult ->
+                                                guardarColeccionJson(this, "recetas", "recetas.json")
+                                            }
+
                                         Handler().postDelayed({
                                             val intent =
                                                 Intent(this, MainActivity::class.java)
@@ -320,5 +332,29 @@ class Crear : AppCompatActivity() {
         dialog.show()
 
 
+    }
+
+    fun guardarColeccionJson(
+        context: Context,
+        coleccion: String,
+        nombreFichero: String,
+    ) {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection(coleccion).get().addOnSuccessListener { querySnapshot ->
+            val articleList = mutableListOf<Map<String, Any>>()
+
+            for (document in querySnapshot) {
+                articleList.add(document.data)
+            }
+
+            val gson = GsonBuilder().setPrettyPrinting().create()
+            val json = gson.toJson(articleList)
+
+            val outputStream: OutputStream =
+                context.openFileOutput(nombreFichero, Context.MODE_PRIVATE)
+            outputStream.write(json.toByteArray())
+            outputStream.close()
+        }
     }
 }

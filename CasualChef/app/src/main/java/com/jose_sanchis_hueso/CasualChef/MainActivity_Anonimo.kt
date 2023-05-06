@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.GsonBuilder
 import com.jose_sanchis_hueso.CasualChef.databinding.ActivityMainAnonimoBinding
-import com.jose_sanchis_hueso.CasualChef.model.Articulo
+import com.jose_sanchis_hueso.CasualChef.model.Receta
 import java.io.OutputStream
 
 class MainActivity_Anonimo : AppCompatActivity(), OnItemClick {
@@ -147,8 +147,8 @@ class MainActivity_Anonimo : AppCompatActivity(), OnItemClick {
 
     }
 
-    override fun onIntemClick(articulo: Articulo) {
-        abrirDetalle(articulo.id)
+    override fun onIntemClick(receta: Receta) {
+        abrirDetalle(receta.id)
 
     }
 
