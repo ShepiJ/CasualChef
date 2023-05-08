@@ -1,11 +1,9 @@
 package com.jose_sanchis_hueso.CasualChef
 
-import android.Manifest
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -21,8 +19,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -49,23 +45,7 @@ class ActivityEditarReceta : AppCompatActivity() {
         binding = ActivityEditarRecetaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // pide acceso a archivos y tal, sin esto no podria mandar imagenes
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                GALLERY_REQUEST_CODE
-            )
-        } else {
-        }
-
         ponerTextos()
-
-
 
         binding.editDescripcion.setOnClickListener {
             cambiarTexto(binding.descripcionReceta)
@@ -158,7 +138,7 @@ class ActivityEditarReceta : AppCompatActivity() {
                         val firestore = FirebaseFirestore.getInstance()
                         val recetasRef = firestore.collection("recetas")
                         val cosas: MutableMap<String, Any> = HashMap()
-                        cosas["id"] = idReceta.toString() // Set the ID of the recipe to update
+                        cosas["id"] = idReceta.toString()
                         cosas["nombre"] = binding.nombreReceta.text.toString()
                         cosas["desarrollador"] = username.toString()
                         cosas["ingredientes"] = binding.ingredientesReceta.text.toString()
@@ -195,7 +175,7 @@ class ActivityEditarReceta : AppCompatActivity() {
                                 FirebaseStorage.getInstance().reference.child("images/${imagenID}")
 
                             val uploadTask =
-                                imageUri?.let { resizeImage(it) }?.let { storageRef.putFile(it) }
+                                imageUri?.let { cambiarResolucionImagen_ComprimirGuardar(it) }?.let { storageRef.putFile(it) }
                             uploadTask?.continueWithTask { task ->
                                 if (!task.isSuccessful) {
                                     task.exception?.let {
@@ -215,7 +195,6 @@ class ActivityEditarReceta : AppCompatActivity() {
                             .addOnSuccessListener { documents ->
                                 if (documents.size() > 0) {
                                     val document = documents.documents[0]
-                                    // Update the `cosas` map in the document
                                     document.reference.update(cosas)
                                         .addOnSuccessListener {
                                             Toast.makeText(
@@ -275,18 +254,17 @@ class ActivityEditarReceta : AppCompatActivity() {
 
 
         if (requestCode == GALLERY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
-            // Get the selected image URI
+
             imageUri = data.data
 
             if (imageUri != null) {
-                // Set the image view with the selected image after resizing it
                 binding.imagenSeleccion.setImageURI(null)
-                binding.imagenSeleccion.setImageBitmap(getResizedBitmap(imageUri))
+                binding.imagenSeleccion.setImageBitmap(cambiarResolucionImagen_ReModelar(imageUri))
             }
         }
     }
 
-    private fun getResizedBitmap(imageUri: Uri?): Bitmap {
+    private fun cambiarResolucionImagen_ReModelar(imageUri: Uri?): Bitmap {
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
         BitmapFactory.decodeStream(
@@ -314,22 +292,20 @@ class ActivityEditarReceta : AppCompatActivity() {
         )!!
     }
 
-    private fun resizeImage(imageUri: Uri?): Uri {
+    private fun cambiarResolucionImagen_ComprimirGuardar(imageUri: Uri?): Uri {
         if (imageUri == null) {
-            throw IllegalArgumentException("imageUri cannot be null")
+            throw IllegalArgumentException("imageUri no puede estar vacia")
         }
-        val resizedBitmap = getResizedBitmap(imageUri)
+        val resizedBitmap = cambiarResolucionImagen_ReModelar(imageUri)
         val outputStream = ByteArrayOutputStream()
         resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
         val byteArray = outputStream.toByteArray()
 
-        // Create a new file in the app's local storage directory
         val resizedImageFile = File(this?.cacheDir, "resized_image.jpg")
         val fos = FileOutputStream(resizedImageFile)
         fos.write(byteArray)
         fos.close()
 
-        // Return the URI of the new file
         return Uri.fromFile(resizedImageFile)
     }
 
@@ -348,7 +324,6 @@ class ActivityEditarReceta : AppCompatActivity() {
                     val userData = querySnapshot.documents[0].data
 
                     with(binding) {
-                        //Hay que ponerlo así en los editText porque sino no deja porque no permite strings
                         nombreReceta.apply {
                             setText(userData?.get("nombre").toString())
                             inputType = InputType.TYPE_CLASS_TEXT

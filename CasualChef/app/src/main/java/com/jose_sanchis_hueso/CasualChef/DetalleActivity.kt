@@ -17,13 +17,21 @@ import ponerImagen
 
 class DetalleActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetalleBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
 
+    override fun onResume() {
+        super.onResume()
+        //Si vuelves de editar por ejemplo entonces no podrias apretar otra vez a los botones
+        binding.buttonEditar.isEnabled = true
+        binding.buttonBorrar.isEnabled = true
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(
             ActivityDetalleBinding.inflate(layoutInflater).also { binding = it }.root
         )
-        cargarVideoJuego()
+
+        cargarReceta()
 
         val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)
         val username = sharedPrefs.getString("username", "")
@@ -33,11 +41,19 @@ class DetalleActivity : AppCompatActivity() {
         }
 
         binding.buttonEditar.setOnClickListener {
+
+            binding.buttonEditar.isEnabled = false
+            binding.buttonBorrar.isEnabled = false
+
             val intent = Intent(this, ActivityEditarReceta::class.java)
             startActivity(intent)
         }
 
         binding.buttonBorrar.setOnClickListener {
+
+            binding.buttonEditar.isEnabled = false
+            binding.buttonBorrar.isEnabled = false
+
             val sharedPrefs = getSharedPreferences("idGuardadaReceta", Context.MODE_PRIVATE)
             val id_aBorrar = sharedPrefs.getString("ID", "")
 
@@ -73,7 +89,7 @@ class DetalleActivity : AppCompatActivity() {
                 }
         }
 
-        binding.tvDeveloper.setOnClickListener {
+        binding.devoloperReceta.setOnClickListener {
 
             var usuarioPreferencia =
                 this?.getSharedPreferences(
@@ -81,7 +97,7 @@ class DetalleActivity : AppCompatActivity() {
                     MODE_PRIVATE
                 )
             usuarioPreferencia?.edit()
-                ?.putString("username", binding.tvDeveloper.text.toString())
+                ?.putString("username", binding.devoloperReceta.text.toString())
                 ?.apply()
 
             val intent = Intent(this, ActivityDatos_UsuarioLite::class.java)
@@ -90,14 +106,14 @@ class DetalleActivity : AppCompatActivity() {
 
     }
 
-    private fun cargarVideoJuego() {
+    private fun cargarReceta() {
         try {
             val id = intent.getStringExtra("ID")
             val receta = Receta.getRecetaId(id.toString(), this)
 
             val imageView = binding.imageView
             val tvNombre = binding.tvNombre
-            val tvDeveloper = binding.tvDeveloper
+            val tvDeveloper = binding.devoloperReceta
             val tvTag1 = binding.tvTag1
             val tvIngredients = binding.tvIngredientes
             val tvDescripcion = binding.tvDescripcion
@@ -144,7 +160,7 @@ class DetalleActivity : AppCompatActivity() {
             val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)
             val username = sharedPrefs.getString("username", "")
 
-            if (binding.tvDeveloper.text.toString().equals(username)) {
+            if (binding.devoloperReceta.text.toString().equals(username)) {
                 binding.buttonEditar.isEnabled = true
                 binding.buttonEditar.isVisible = true
                 binding.buttonBorrar.isEnabled = true

@@ -57,9 +57,9 @@ class MyRecyclerViewAdapter(
 
     inner class ViewHolder(binding: FragmentCartaArticuloBinding) : RecyclerView.ViewHolder(binding.root),View.OnClickListener {
 
-        val tvNombre: TextView = binding.tvTituloVideojuegos
-        val tvDesarrollador: TextView = binding.tvDeveloper
-        val ivArticulo: ImageView = binding.ivVideojuego
+        val tvNombre: TextView = binding.tituloReceta
+        val tvDesarrollador: TextView = binding.devoloperReceta
+        val ivArticulo: ImageView = binding.imagenReceta
 
         override fun toString(): String {
             return super.toString() + "${tvNombre} is ${tvDesarrollador}"

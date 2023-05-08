@@ -88,7 +88,7 @@ class ActivityDatos_Usuario : AppCompatActivity() {
         binding.pasarMain.setOnClickListener {
             hacerUpdate()
             try {
-                uploadImageToFirebaseStorage()
+                subirImagen_Firebase()
             } catch (e: Exception) {
                 //Si no has puesto foto saldrá este error controlado
             }
@@ -147,7 +147,7 @@ class ActivityDatos_Usuario : AppCompatActivity() {
             val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
             val resizedBitmap = Bitmap.createScaledBitmap(bitmap, IMAGE_WIDTH, IMAGE_HEIGHT, false)
 
-            val cacheDir = cacheDir // get the cache directory
+            val cacheDir = cacheDir
             val fileName = username+".png"
             val file = File(cacheDir, fileName)
 
@@ -205,7 +205,7 @@ class ActivityDatos_Usuario : AppCompatActivity() {
     }
 
 
-    fun uploadImageToFirebaseStorage() {
+    fun subirImagen_Firebase() {
         val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)
         val username = sharedPrefs.getString("username", "")
 

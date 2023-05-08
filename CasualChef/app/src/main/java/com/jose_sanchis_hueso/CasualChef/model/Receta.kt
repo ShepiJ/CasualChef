@@ -183,7 +183,6 @@ data class Receta(
             val sharedPrefs = context.getSharedPreferences("login", Context.MODE_PRIVATE)
             val username = sharedPrefs.getString("username", "")
 
-            // Read from the JSON file
             val file = File(context.filesDir, "recetas.json")
             val jsonString = file.readText(Charset.defaultCharset())
 
@@ -201,7 +200,6 @@ data class Receta(
         fun getReceta(context: Context): List<Receta> {
             val recetaList: MutableList<Receta> = mutableListOf()
 
-            // Read from the JSON file
             val file = File(context.filesDir, "recetas.json")
             val jsonString = file.readText(Charset.defaultCharset())
 

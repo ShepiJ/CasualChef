@@ -16,41 +16,39 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tvDeveloper"
+            android:id="@+id/devoloper_Receta"
             android:layout_width="174dp"
             android:layout_height="31dp"
             android:layout_marginTop="14dp"
             android:gravity="center"
-            android:text="developer del juego"
+            android:text="devoloper receta"
             android:textColor="@color/letra"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/tvTituloVideojuegos"
+            app:layout_constraintEnd_toEndOf="@+id/titulo_Receta"
             app:layout_constraintHorizontal_bias="0.45"
-            app:layout_constraintStart_toStartOf="@+id/tvTituloVideojuegos"
-            app:layout_constraintTop_toBottomOf="@+id/tvTituloVideojuegos" />
-
-
+            app:layout_constraintStart_toStartOf="@+id/titulo_Receta"
+            app:layout_constraintTop_toBottomOf="@+id/titulo_Receta" />
 
         <TextView
-            android:id="@+id/tvTituloVideojuegos"
+            android:id="@+id/titulo_Receta"
             android:layout_width="179dp"
             android:layout_height="47dp"
             android:layout_marginStart="7dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="6dp"
-            android:text="Nombre del juego"
+            android:text="Nombre de la receta"
             android:gravity="center"
             android:textColor="@color/letra"
             android:textSize="15sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/tvDeveloper"
+            app:layout_constraintBottom_toTopOf="@+id/devoloper_Receta"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ivVideojuego"
+            app:layout_constraintStart_toEndOf="@+id/imagen_Receta"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/ivVideojuego"
+            android:id="@+id/imagen_Receta"
             android:layout_width="181dp"
             android:layout_height="match_parent"
             android:scaleType="fitXY"

@@ -1,12 +1,16 @@
 package com.jose_sanchis_hueso.CasualChef
 
 import OnItemClick
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.animation.doOnEnd
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -135,17 +139,17 @@ class MainActivity : AppCompatActivity(), OnItemClick {
                 startActivity(intent)
             }
             R.id.reset -> {
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
+                recargar()
+            }
+            R.id.reset -> {
+
+                recargar()
             }
         }
-
-
         return NavigationUI.onNavDestinationSelected(
             item,
             navController
         ) || super.onOptionsItemSelected(item)
-
     }
 
     override fun onIntemClick(receta: Receta) {
@@ -177,6 +181,38 @@ class MainActivity : AppCompatActivity(), OnItemClick {
         }
     }
 
+    fun recargar() {
+        val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)
+        val username = sharedPrefs.getString("username", "")
+        val pass = sharedPrefs.getString("contraseña", "")
+
+
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(username.toString()+"@gmail.com", pass.toString())
+            .addOnSuccessListener { authResult ->
+                guardarColeccionJson(this, "recetas", "recetas.json")
+            }
+
+        //Recarga el los datos del recycleviewer por si algo nuevo no ha salido porque le json no se ha descargado con tiempo o algo parecido
+        val progressBar = binding.progressBar
+        progressBar.visibility = View.VISIBLE
+
+        val animator = ObjectAnimator.ofInt(progressBar, "progress", 0, 100)
+        animator.duration = 1000
+        animator.interpolator = LinearInterpolator()
+        animator.start()
+
+        animator.doOnEnd {
+            val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            val navController = navHostFragment.navController
+            val currentDestination = navController.currentDestination
+            currentDestination?.let {
+                navController.navigate(it.id)
+            }
+
+            progressBar.visibility = View.GONE
+            //Me gustaria que pudiera reiniciar el nav con el tab en el que estaba el usuario pero nose como hacerlo.
+        }
+    }
 
     private fun abrirDetalle(id: String) {
         try {

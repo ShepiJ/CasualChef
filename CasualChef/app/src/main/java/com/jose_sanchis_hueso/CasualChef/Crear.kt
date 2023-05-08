@@ -1,11 +1,9 @@
 package com.jose_sanchis_hueso.CasualChef
 
-import android.Manifest
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -20,8 +18,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -45,23 +41,6 @@ class Crear : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCrearBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
-        // pide acceso a archivos y tal, sin esto no podria mandar imagenes
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                GALLERY_REQUEST_CODE
-            )
-        } else {
-        }
-
-
 
         binding.editDescripcion.setOnClickListener {
             cambiarTexto(binding.descripcionReceta)
@@ -179,7 +158,7 @@ class Crear : AppCompatActivity() {
                             FirebaseStorage.getInstance().reference.child("images/${imagenID}")
 
                         val uploadTask =
-                            imageUri?.let { resizeImage(it) }?.let { storageRef.putFile(it) }
+                            imageUri?.let { cambiarResolucionImagen_ComprimirGuardar(it) }?.let { storageRef.putFile(it) }
                         uploadTask?.continueWithTask { task ->
                             if (!task.isSuccessful) {
                                 task.exception?.let {
@@ -191,7 +170,6 @@ class Crear : AppCompatActivity() {
                             if (task.isSuccessful) {
                                 cosas["imagen"] = imagenID
 
-                                // Add the `cosas` map to the `recetas` collection in Firestore
                                 firestore.collection("recetas")
                                     .add(cosas)
                                     .addOnSuccessListener {
@@ -261,12 +239,12 @@ class Crear : AppCompatActivity() {
             if (imageUri != null) {
 
                 binding.imagenSeleccion.setImageURI(null)
-                binding.imagenSeleccion.setImageBitmap(getResizedBitmap(imageUri))
+                binding.imagenSeleccion.setImageBitmap(cambiarResolucionImagen_ReModelar(imageUri))
             }
         }
     }
 
-    private fun getResizedBitmap(imageUri: Uri?): Bitmap {
+    private fun cambiarResolucionImagen_ReModelar(imageUri: Uri?): Bitmap {
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
         BitmapFactory.decodeStream(
@@ -294,11 +272,11 @@ class Crear : AppCompatActivity() {
         )!!
     }
 
-    private fun resizeImage(imageUri: Uri?): Uri {
+    private fun cambiarResolucionImagen_ComprimirGuardar(imageUri: Uri?): Uri {
         if (imageUri == null) {
-            throw IllegalArgumentException("imageUri cannot be null")
+            throw IllegalArgumentException("imageUri no puede estar vacia")
         }
-        val resizedBitmap = getResizedBitmap(imageUri)
+        val resizedBitmap = cambiarResolucionImagen_ReModelar(imageUri)
         val outputStream = ByteArrayOutputStream()
         resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
         val byteArray = outputStream.toByteArray()

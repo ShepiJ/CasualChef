@@ -72,7 +72,6 @@ class Registracion : AppCompatActivity() {
                                             }
                                         }
                                 } else {
-                                    //
                                     Toast.makeText(
                                         this,
                                         "La cuenta que está intentando crear ya existe.\n\nPruebe otro usuario",

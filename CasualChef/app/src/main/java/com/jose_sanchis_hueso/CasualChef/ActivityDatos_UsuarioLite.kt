@@ -19,7 +19,7 @@ class ActivityDatos_UsuarioLite : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        val sharedPrefs = getSharedPreferences("login", Context.MODE_PRIVATE)
+        val sharedPrefs = getSharedPreferences("usuario", Context.MODE_PRIVATE)
         val username = sharedPrefs.getString("username", "")
 
         val firestore = FirebaseFirestore.getInstance()

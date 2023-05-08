@@ -71,30 +71,37 @@ class Login : AppCompatActivity() {
         //Coge los datos de la base de datos de forma anonima
         FirebaseAuth.getInstance().signInAnonymously()
             .addOnSuccessListener { authResult ->
-
-
-
                 guardarColeccionJson(this, "recetas", "recetas.json")
             }
 
         //El usuario no puede poner un nombre con espacios.
         binding.pasarMain.setOnClickListener {
+
+            binding.pasarMain.isEnabled = false
+            binding.button2.isEnabled = false
+
             val email = binding.cogerUsuario.text.toString() + "@gmail.com"
             val password = binding.cogerContraseA.text.toString()
 
             if (password.isBlank()) {
+                binding.pasarMain.isEnabled = true
+                binding.button2.isEnabled = true
                 Toast.makeText(this, "El campo Contraseña no puede estar vacio", Toast.LENGTH_SHORT)
                     .show()
                 return@setOnClickListener
             }
 
             if (email.isBlank()) {
+                binding.pasarMain.isEnabled = true
+                binding.button2.isEnabled = true
                 Toast.makeText(this, "El campo Usuario no puede estar vacio", Toast.LENGTH_SHORT)
                     .show()
                 return@setOnClickListener
             }
 
             if (binding.cogerUsuario.text.toString().contains(" ")) {
+                binding.pasarMain.isEnabled = true
+                binding.button2.isEnabled = true
                 Toast.makeText(
                     this,
                     "El correo electrónico no puede contener espacios",
@@ -107,6 +114,7 @@ class Login : AppCompatActivity() {
             mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
+
                         var usuarioPreferencia =
                             this?.getSharedPreferences(
                                 "login",
@@ -257,12 +265,14 @@ class Login : AppCompatActivity() {
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                     } else {
-                        //
                         Toast.makeText(
                             this,
                             "La Contraseña/Usuario no se pueden encontrar en la base de datos",
                             Toast.LENGTH_SHORT
                         ).show()
+
+                        binding.pasarMain.isEnabled = true
+                        binding.button2.isEnabled = true
                     }
                 }
         }
@@ -284,6 +294,11 @@ class Login : AppCompatActivity() {
                 ?.putString("contraseña", "")
                 ?.putBoolean("checkbox_checked", binding.checkBox.isChecked)
                 ?.apply()
+
+            FirebaseAuth.getInstance().signInAnonymously()
+                .addOnSuccessListener { authResult ->
+                    guardarColeccionJson(this, "recetas", "recetas.json")
+                }
 
             val intent = Intent(this, MainActivity_Anonimo::class.java)
             startActivity(intent)
@@ -313,8 +328,3 @@ class Login : AppCompatActivity() {
         }
     }
 }
-
-
-/**
-
- **/
