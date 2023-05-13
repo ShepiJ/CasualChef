@@ -50,7 +50,7 @@ class ActivityDatos_UsuarioLite : AppCompatActivity() {
                                     imagenUsu
                                 )
                             } else {
-                                imagenUsu.setImageResource(R.drawable.casualchef)
+                                imagenUsu.setImageResource(R.drawable.user)
                             }
                         }
 

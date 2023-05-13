@@ -108,8 +108,8 @@ class ActivityDatos_Usuario : AppCompatActivity() {
 
         // Crea un Dialog para poner lo que quieras
         val dialog = AlertDialog.Builder(context)
-            .setTitle("Cambiar nombre")
-            .setMessage("Ingrese un nuevo nombre:")
+            .setTitle("Cambiar campo")
+            .setMessage("Haga su cambio:")
             .setView(editText)
             .setPositiveButton("Aceptar") { _, _ ->
                 val nuevoNombre = editText.text.toString()

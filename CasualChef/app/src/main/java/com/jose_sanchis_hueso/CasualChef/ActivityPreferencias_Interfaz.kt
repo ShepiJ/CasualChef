@@ -62,7 +62,7 @@ class ActivityPreferencias_Interfaz : AppCompatActivity() {
 
     private fun ponerColor(textview: TextView, boton: Button) {
         ColorPickerDialog.Builder(this)
-            .setTitle("ColorPicker Dialog")
+            .setTitle("Seleccione un color")
             .setPreferenceName("MyColorPickerDialog")
             .setPositiveButton(("Confirmar"),
                 ColorEnvelopeListener { envelope, fromUser ->
@@ -78,7 +78,7 @@ class ActivityPreferencias_Interfaz : AppCompatActivity() {
                     }
                 })
             .setNegativeButton(
-                getString(R.string.cancel)
+                "Cancelar"
             ) { dialogInterface, i -> dialogInterface.dismiss() }
             .attachAlphaSlideBar(true)
             .attachBrightnessSlideBar(true)
