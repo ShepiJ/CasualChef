@@ -181,15 +181,15 @@ class ActivityDatos_Usuario : AppCompatActivity() {
                 query.get()
                     .addOnSuccessListener { documents ->
                         for (document in documents) {
-                            val updateData: MutableMap<String, Any> = HashMap()
-                            updateData["nombre"] = binding.usuarioUsu.text.toString()
-                            updateData["apellido"] = binding.apellidoUsu.text.toString()
-                            updateData["email"] = binding.emailUsu.text.toString()
-                            updateData["telefono"] = binding.telefonoUsu.text.toString()
-                            updateData["imagen"] = username.toString() + ".png"
-                            updateData["descripcion"] = binding.descripcionUsu.text.toString()
+                            val paqueteUsuario: MutableMap<String, Any> = HashMap()
+                            paqueteUsuario["nombre"] = binding.usuarioUsu.text.toString()
+                            paqueteUsuario["apellido"] = binding.apellidoUsu.text.toString()
+                            paqueteUsuario["email"] = binding.emailUsu.text.toString()
+                            paqueteUsuario["telefono"] = binding.telefonoUsu.text.toString()
+                            paqueteUsuario["imagen"] = username.toString() + ".png"
+                            paqueteUsuario["descripcion"] = binding.descripcionUsu.text.toString()
 
-                            document.reference.update(updateData)
+                            document.reference.update(paqueteUsuario)
                                 .addOnSuccessListener {
                                     Log.d(TAG, "Document updated successfully")
                                 }

@@ -137,13 +137,13 @@ class ActivityEditarReceta : AppCompatActivity() {
                         val username = sharedPrefs.getString("username", "")
                         val firestore = FirebaseFirestore.getInstance()
                         val recetasRef = firestore.collection("recetas")
-                        val cosas: MutableMap<String, Any> = HashMap()
-                        cosas["id"] = idReceta.toString()
-                        cosas["nombre"] = binding.nombreReceta.text.toString()
-                        cosas["desarrollador"] = username.toString()
-                        cosas["ingredientes"] = binding.ingredientesReceta.text.toString()
-                        cosas["descripcion"] = binding.descripcionReceta.text.toString()
-                        cosas["tags"] = binding.tagsReceta.text.toString()
+                        val paqueteReceta: MutableMap<String, Any> = HashMap()
+                        paqueteReceta["id"] = idReceta.toString()
+                        paqueteReceta["nombre"] = binding.nombreReceta.text.toString()
+                        paqueteReceta["desarrollador"] = username.toString()
+                        paqueteReceta["ingredientes"] = binding.ingredientesReceta.text.toString()
+                        paqueteReceta["descripcion"] = binding.descripcionReceta.text.toString()
+                        paqueteReceta["tags"] = binding.tagsReceta.text.toString()
                         val condiciones = listOf(
                             binding.bool1.isChecked,
                             binding.bool2.isChecked,
@@ -151,10 +151,10 @@ class ActivityEditarReceta : AppCompatActivity() {
                             binding.bool4.isChecked,
                             binding.bool5.isChecked
                         )
-                        cosas["condiciones"] = condiciones
+                        paqueteReceta["condiciones"] = condiciones
                         val rating: Float = binding.dificultad.getRating()
                         val ratingDouble = rating.toDouble()
-                        cosas["dificultad"] = ratingDouble.toString()
+                        paqueteReceta["dificultad"] = ratingDouble.toString()
                         if (horasEditText.text.toString().length == 1) {
                             val text = horasEditText.text.toString().padStart(2, '0')
                             hora = text
@@ -165,10 +165,10 @@ class ActivityEditarReceta : AppCompatActivity() {
                             minutos = text
                         }
 
-                        cosas["tiempoPrep"] =
+                        paqueteReceta["tiempoPrep"] =
                             hora + ":" + minutos
 
-                        if (imagenClicked) {
+                        if (imagenClicked==true) {
                             var imagenID: String = UUID.randomUUID().toString() + ".png"
 
                             val storageRef =
@@ -180,14 +180,14 @@ class ActivityEditarReceta : AppCompatActivity() {
                                 if (!task.isSuccessful) {
                                     task.exception?.let {
                                         throw it
-
                                     }
                                 }
 
                                 storageRef.downloadUrl
                             }
+                            paqueteReceta["imagen"] = imagenID
                         } else {
-                            cosas["imagen"] = nombreImagen
+                            paqueteReceta["imagen"] = nombreImagen
                         }
                         firestore.collection("recetas")
                             .whereEqualTo("id", idReceta.toString())
@@ -195,7 +195,7 @@ class ActivityEditarReceta : AppCompatActivity() {
                             .addOnSuccessListener { documents ->
                                 if (documents.size() > 0) {
                                     val document = documents.documents[0]
-                                    document.reference.update(cosas)
+                                    document.reference.update(paqueteReceta)
                                         .addOnSuccessListener {
                                             Toast.makeText(
                                                 this,
@@ -242,9 +242,7 @@ class ActivityEditarReceta : AppCompatActivity() {
         binding.imagenSeleccion.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(intent, GALLERY_REQUEST_CODE)
-            if (imageUri != null) {
                 imagenClicked = true
-            }
         }
 
     }
@@ -350,13 +348,13 @@ class ActivityEditarReceta : AppCompatActivity() {
 
                         binding.horas.apply {
                             setText(horas)
-                            inputType = InputType.TYPE_CLASS_TEXT
+                            inputType = InputType.TYPE_CLASS_NUMBER
                             isFocusable = true
                             isFocusableInTouchMode = true
                         }
                         binding.minutos.apply {
                             setText(minutos)
-                            inputType = InputType.TYPE_CLASS_TEXT
+                            inputType = InputType.TYPE_CLASS_NUMBER
                             isFocusable = true
                             isFocusableInTouchMode = true
                         }

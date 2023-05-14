@@ -119,14 +119,14 @@ class Crear : AppCompatActivity() {
                             getSharedPreferences("login", Context.MODE_PRIVATE)
                         val username = sharedPrefs.getString("username", "")
                         val firestore = FirebaseFirestore.getInstance()
-                        val cosas: MutableMap<String, Any> = HashMap()
+                        val paqueteReceta: MutableMap<String, Any> = HashMap()
 
-                        cosas["id"] = UUID.randomUUID().toString()
-                        cosas["nombre"] = binding.nombreReceta.text.toString()
-                        cosas["desarrollador"] = username.toString()
-                        cosas["ingredientes"] = binding.ingredientesReceta.text.toString()
-                        cosas["descripcion"] = binding.descripcionReceta.text.toString()
-                        cosas["tags"] = binding.tagsReceta.text.toString()
+                        paqueteReceta["id"] = UUID.randomUUID().toString()
+                        paqueteReceta["nombre"] = binding.nombreReceta.text.toString()
+                        paqueteReceta["desarrollador"] = username.toString()
+                        paqueteReceta["ingredientes"] = binding.ingredientesReceta.text.toString()
+                        paqueteReceta["descripcion"] = binding.descripcionReceta.text.toString()
+                        paqueteReceta["tags"] = binding.tagsReceta.text.toString()
                         val condiciones = listOf(
                             binding.bool1.isChecked,
                             binding.bool2.isChecked,
@@ -134,10 +134,10 @@ class Crear : AppCompatActivity() {
                             binding.bool4.isChecked,
                             binding.bool5.isChecked
                         )
-                        cosas["condiciones"] = condiciones
+                        paqueteReceta["condiciones"] = condiciones
                         val rating: Float = binding.dificultad.getRating()
                         val ratingDouble = rating.toDouble()
-                        cosas["dificultad"] = ratingDouble.toString()
+                        paqueteReceta["dificultad"] = ratingDouble.toString()
 
                         if (horasEditText.text.toString().length == 1){
                             val text = horasEditText.text.toString().padStart(2, '0')
@@ -149,7 +149,7 @@ class Crear : AppCompatActivity() {
                             minutos = text
                         }
 
-                        cosas["tiempoPrep"] =
+                        paqueteReceta["tiempoPrep"] =
                             hora + ":" + minutos
 
                         var imagenID: String = UUID.randomUUID().toString() + ".png"
@@ -168,10 +168,10 @@ class Crear : AppCompatActivity() {
                             storageRef.downloadUrl
                         }?.addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                cosas["imagen"] = imagenID
+                                paqueteReceta["imagen"] = imagenID
 
                                 firestore.collection("recetas")
-                                    .add(cosas)
+                                    .add(paqueteReceta)
                                     .addOnSuccessListener {
                                         Toast.makeText(
                                             this,

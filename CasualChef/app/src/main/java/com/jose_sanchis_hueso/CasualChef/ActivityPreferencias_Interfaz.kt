@@ -1,6 +1,5 @@
 package com.jose_sanchis_hueso.CasualChef
 
-import android.R
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
@@ -140,13 +139,13 @@ class ActivityPreferencias_Interfaz : AppCompatActivity() {
 
                 val firestore = FirebaseFirestore.getInstance()
 
-                val datos_usuario_Nuevo: MutableMap<String, Any> = HashMap()
+                val paqueteInterfaz: MutableMap<String, Any> = HashMap()
 
-                datos_usuario_Nuevo["colorLetra"] = binding.colorLetra.text.toString()
-                datos_usuario_Nuevo["colorEtiqueta"] = binding.colorEtiqueta.text.toString()
-                datos_usuario_Nuevo["colorBotones"] = binding.colorBotones.text.toString()
-                datos_usuario_Nuevo["fondoColorReceta"] = binding.fondocolorReceta.text.toString()
-                datos_usuario_Nuevo["usuario"] = username.toString()
+                paqueteInterfaz["colorLetra"] = binding.colorLetra.text.toString()
+                paqueteInterfaz["colorEtiqueta"] = binding.colorEtiqueta.text.toString()
+                paqueteInterfaz["colorBotones"] = binding.colorBotones.text.toString()
+                paqueteInterfaz["fondoColorReceta"] = binding.fondocolorReceta.text.toString()
+                paqueteInterfaz["usuario"] = username.toString()
 
                 firestore.collection("preferencias_interfaz")
                     .whereEqualTo("usuario", username.toString())
@@ -154,7 +153,7 @@ class ActivityPreferencias_Interfaz : AppCompatActivity() {
                     .addOnSuccessListener { querySnapshot ->
                         if (!querySnapshot.isEmpty) {
                             val documentSnapshot = querySnapshot.documents[0]
-                            documentSnapshot.reference.update(datos_usuario_Nuevo)
+                            documentSnapshot.reference.update(paqueteInterfaz)
                                 .addOnSuccessListener {
                                     Toast.makeText(
                                         this,

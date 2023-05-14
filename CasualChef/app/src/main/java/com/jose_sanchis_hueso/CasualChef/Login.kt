@@ -1,19 +1,12 @@
 package com.jose_sanchis_hueso.CasualChef
 
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
-import android.view.View
-import android.view.animation.AnticipateInterpolator
-import android.view.animation.DecelerateInterpolator
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -145,17 +138,17 @@ class Login : AppCompatActivity() {
                                     .get()
                                     .addOnSuccessListener { querySnapshot ->
                                         if (querySnapshot.isEmpty) {
-                                            val datos_usuario_Nuevo: MutableMap<String, Any> = HashMap()
-                                            datos_usuario_Nuevo["usuario"] = username.toString()
-                                            datos_usuario_Nuevo["nombre"] = "default"
-                                            datos_usuario_Nuevo["apellido"] = "default"
-                                            datos_usuario_Nuevo["email"] = "default"
-                                            datos_usuario_Nuevo["telefono"] = "default"
-                                            datos_usuario_Nuevo["imagen"] = "default"
-                                            datos_usuario_Nuevo["descripcion"] = "default"
+                                            val paqueteUsuario: MutableMap<String, Any> = HashMap()
+                                            paqueteUsuario["usuario"] = username.toString()
+                                            paqueteUsuario["nombre"] = "default"
+                                            paqueteUsuario["apellido"] = "default"
+                                            paqueteUsuario["email"] = "default"
+                                            paqueteUsuario["telefono"] = "default"
+                                            paqueteUsuario["imagen"] = "default"
+                                            paqueteUsuario["descripcion"] = "default"
 
                                             firestore.collection("datos_usuario")
-                                                .add(datos_usuario_Nuevo)
+                                                .add(paqueteUsuario)
                                         }
                                     }
                             }
@@ -181,16 +174,16 @@ class Login : AppCompatActivity() {
                                             .get()
                                             .addOnSuccessListener { querySnapshot ->
                                                 if (querySnapshot.isEmpty) {
-                                                    val datos_interfaz_usuario: MutableMap<String, Any> =
+                                                    val paqueteInterfaz: MutableMap<String, Any> =
                                                         HashMap()
-                                                    datos_interfaz_usuario["usuario"] = username.toString()
-                                                    datos_interfaz_usuario["colorLetra"] = "#FFFFFF"
-                                                    datos_interfaz_usuario["colorEtiqueta"] = "#4970E3"
-                                                    datos_interfaz_usuario["colorBotones"] = "#A6A8A8"
-                                                    datos_interfaz_usuario["fondoColorReceta"] = "#151515"
+                                                    paqueteInterfaz["usuario"] = username.toString()
+                                                    paqueteInterfaz["colorLetra"] = "#FFFFFF"
+                                                    paqueteInterfaz["colorEtiqueta"] = "#4970E3"
+                                                    paqueteInterfaz["colorBotones"] = "#A6A8A8"
+                                                    paqueteInterfaz["fondoColorReceta"] = "#151515"
 
                                                     firestore.collection("preferencias_interfaz")
-                                                        .add(datos_interfaz_usuario)
+                                                        .add(paqueteInterfaz)
                                                 }
                                             }
                                     }
@@ -211,16 +204,16 @@ class Login : AppCompatActivity() {
                                             .get()
                                             .addOnSuccessListener { querySnapshot ->
                                                 if (querySnapshot.isEmpty) {
-                                                    val datos_interfaz_usuario: MutableMap<String, Any> =
+                                                    val paqueteInterfaz: MutableMap<String, Any> =
                                                         HashMap()
-                                                    datos_interfaz_usuario["usuario"] = username.toString()
-                                                    datos_interfaz_usuario["colorLetra"] = "#000000"
-                                                    datos_interfaz_usuario["colorEtiqueta"] = "#0025FA"
-                                                    datos_interfaz_usuario["colorBotones"] = "#787A7A"
-                                                    datos_interfaz_usuario["fondoColorReceta"] = "#8799AC"
+                                                    paqueteInterfaz["usuario"] = username.toString()
+                                                    paqueteInterfaz["colorLetra"] = "#000000"
+                                                    paqueteInterfaz["colorEtiqueta"] = "#0025FA"
+                                                    paqueteInterfaz["colorBotones"] = "#787A7A"
+                                                    paqueteInterfaz["fondoColorReceta"] = "#8799AC"
 
                                                     firestore.collection("preferencias_interfaz")
-                                                        .add(datos_interfaz_usuario)
+                                                        .add(paqueteInterfaz)
                                                 }
                                             }
                                     }
@@ -242,16 +235,16 @@ class Login : AppCompatActivity() {
                                             .get()
                                             .addOnSuccessListener { querySnapshot ->
                                                 if (querySnapshot.isEmpty) {
-                                                    val datos_interfaz_usuario: MutableMap<String, Any> =
+                                                    val paqueteInterfaz: MutableMap<String, Any> =
                                                         HashMap()
-                                                    datos_interfaz_usuario["usuario"] = username.toString()
-                                                    datos_interfaz_usuario["colorLetra"] = "#000000"
-                                                    datos_interfaz_usuario["colorEtiqueta"] = "#0025FA"
-                                                    datos_interfaz_usuario["colorBotones"] = "#787A7A"
-                                                    datos_interfaz_usuario["fondoColorReceta"] = "#8799AC"
+                                                    paqueteInterfaz["usuario"] = username.toString()
+                                                    paqueteInterfaz["colorLetra"] = "#000000"
+                                                    paqueteInterfaz["colorEtiqueta"] = "#0025FA"
+                                                    paqueteInterfaz["colorBotones"] = "#787A7A"
+                                                    paqueteInterfaz["fondoColorReceta"] = "#8799AC"
 
                                                     firestore.collection("preferencias_interfaz")
-                                                        .add(datos_interfaz_usuario)
+                                                        .add(paqueteInterfaz)
                                                 }
                                             }
                                     }
