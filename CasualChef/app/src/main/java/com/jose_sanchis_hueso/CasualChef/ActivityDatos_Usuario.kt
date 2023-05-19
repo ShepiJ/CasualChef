@@ -182,7 +182,7 @@ class ActivityDatos_Usuario : AppCompatActivity() {
                     .addOnSuccessListener { documents ->
                         for (document in documents) {
                             val paqueteUsuario: MutableMap<String, Any> = HashMap()
-                            paqueteUsuario["nombre"] = binding.usuarioUsu.text.toString()
+                            paqueteUsuario["nombre"] = binding.nombreUsu.text.toString()
                             paqueteUsuario["apellido"] = binding.apellidoUsu.text.toString()
                             paqueteUsuario["email"] = binding.emailUsu.text.toString()
                             paqueteUsuario["telefono"] = binding.telefonoUsu.text.toString()
