@@ -7,6 +7,7 @@ Debido al límite de 1 Gigabyte de almacenamiento por parte de utilizar firebase
 
 La aplicación tiene las siguientes funcionalidades:
  
+
  
 **Pantalla de Login/Registro**
 
@@ -49,8 +50,3 @@ La aplicación permite customizar tu usuario con tus datos y una foto de perfil.
 Por último la aplicación también tiene la capacidad de poder cambiar los colores de ciertos componentes dentro de si misma y se cambian con un menú radial que con seleccionar el color para hacerlo fácil para que lo usen los usuarios.
 
 ![Confirguración de interfaz](https://github.com/ShepiJ/CasualChef/assets/127141346/403b4abe-2bdd-4c37-ba4d-502465d1d5f0)
-
-
-**Pensamientos de la aplicación**
-
-Opino que para ser mi primer proyecto de verdad ha salido bastante bien, aunque si hubiera tenido más tiempo talvez habria puesto una funcionalidad de chat o mejorar el aspecto gráfico por ejemplo pero me gustaria dejarlo como está por ahora.
